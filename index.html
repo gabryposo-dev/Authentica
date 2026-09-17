@@ -5,9 +5,9 @@
 .pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #333;color:#888;white-space:nowrap;font-size:13px}
 .pill.act{background:#fff;color:#000;font-weight:700}
 .cam-wrap{position:relative;width:100%;height:48vh;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
-#bgBag{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55}
+#bgBag{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.6}
 #video{position:relative;z-index:2;width:100%;height:100%;object-fit:cover}
-.msg{position:absolute;z-index:3;background:rgba(0,0,0,.85);padding:18px;border-radius:16px;text-align:center;width:86%}
+.msg{position:absolute;z-index:3;background:rgba(0,0,0,.88);padding:18px;border-radius:16px;text-align:center;width:86%}
 .btn{background:#fff;color:#000;padding:12px 22px;border-radius:24px;border:none;font-weight:700;font-size:14px}
 .btn2{background:#222;color:#fff;border:1px solid #333}
 .sheet{background:#141414;border-radius:24px 24px 0 0;padding:20px;margin-top:-18px;position:relative;z-index:4}
@@ -27,15 +27,14 @@
 .outfitSlot{width:90%;height:120px;background:#1a1a1a;border:1px dashed #333;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .outfitSlot img{width:100%;height:100%;object-fit:cover}
 </style></head><body>
-<div class="hdr"><h2>AUTHENTICA</h2><p style="color:#888;font-size:10px;letter-spacing:2px;margin-top:2px">AI LUXURY VERIFICATION</p></div>
+<div class="hdr"><h2>AUTHENTICA</h2><p style="color:#888;font-size:10px;letter-spacing:2px">AI LUXURY VERIFICATION</p></div>
 
-<!-- PAGE 1 VERIFICA -->
 <div id="p1" class="page on">
 <div class="pills" id="pills"></div>
 <div class="cam-wrap">
 <img id="bgBag" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80">
 <video id="video" autoplay muted playsinline></video>
-<div class="msg" id="camMsg"><p style="font-weight:700">📸 Inquadra la tua borsa vera</p><p style="font-size:11px;color:#888;margin:6px 0">L'AI confronta cuciture e logo</p><button class="btn" onclick="startCam()">Attiva Fotocamera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta - usa sfondo brand</button></div>
+<div class="msg" id="camMsg"><p style="font-weight:700">📸 Inquadra la tua borsa</p><p style="font-size:11px;color:#888;margin:6px 0">AI confronta cuciture e logo</p><button class="btn" onclick="startCam()">Attiva Fotocamera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta - usa sfondo brand</button></div>
 <canvas id="canvas" style="display:none"></canvas>
 </div>
 <div class="sheet">
@@ -46,15 +45,13 @@
 </div>
 </div>
 
-<!-- PAGE 2 ARMADIO -->
 <div id="p2" class="page">
 <div style="padding:16px;display:flex;justify-content:space-between;align-items:center"><h3>Il tuo Armadio 👗</h3><button class="btn" style="padding:8px 14px;font-size:12px" onclick="document.getElementById('fileIn').click()">+ Foto Vestito</button></div>
 <input type="file" id="fileIn" accept="image/*" capture="environment" style="display:none" onchange="addCloth(event)">
 <div class="grid" id="wardGrid"></div>
-<p id="empty" style="text-align:center;color:#555;padding:40px 20px">Ancora vuoto.<br>Fai foto a maglie, pantaloni, scarpe, borse!<br>Tutto finisce qui.</p>
+<p id="empty" style="text-align:center;color:#555;padding:40px 20px">Ancora vuoto.<br>Fai foto a maglie, pantaloni, scarpe!</p>
 </div>
 
-<!-- PAGE 3 OUTFIT -->
 <div id="p3" class="page">
 <div style="padding:16px;text-align:center"><h3>Crea Outfit ✨</h3><p style="color:#888;font-size:12px">L'AI abbina dal tuo armadio</p></div>
 <div id="outfitArea">
@@ -71,7 +68,6 @@
 <div class="tab" onclick="go(3)" id="t3">✨<br>Outfit</div>
 </div>
 
-<!-- MODAL VERIFICA -->
 <div id="verifyModal">
 <div style="text-align:center;margin-top:30px"><h2>Scansione AI...</h2><p id="vBrand" style="color:#888;margin-top:6px">Balenciaga</p></div>
 <img id="snap" style="width:100%;height:280px;object-fit:cover;border-radius:16px;margin-top:16px">
@@ -80,16 +76,31 @@
 <button id="closeBtn" class="btn" style="display:none;width:100%;margin-top:auto" onclick="document.getElementById('verifyModal').style.display='none'">Fatto ✨ Chiudi</button>
 </div>
 
+<!-- PAYWALL 3 GIORNI FREE + 4,99 + 29,99 -->
+<div id="paywall" style="position:fixed;inset:0;background:#000;z-index:200;display:none;flex-direction:column;padding:24px;text-align:center;overflow-y:auto">
+<div style="margin-top:10px"><p style="letter-spacing:3px;font-size:11px;color:#888">AUTHENTICA PRO</p><h1 style="font-size:26px;margin:10px 0;line-height:1.2">Sblocca l'AI di lusso illimitata</h1><p style="color:#888;font-size:12px">Verifica infinite • Armadio infinito • Outfit AI</p></div>
+<img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80" style="width:100%;height:160px;object-fit:cover;border-radius:16px;margin:16px 0">
+<div style="background:#fff;color:#000;border-radius:16px;padding:14px;text-align:left;border:2px solid #fff">
+<div style="display:flex;justify-content:space-between;align-items:center"><div><p style="font-weight:800">Annuale ⭐ PIÙ SCELTO</p><p style="font-size:11px;color:#666"><b>3 giorni GRATIS</b>, poi 29,99€/mese</p><p style="font-size:10px;color:#00aa55">Risparmi 60% - 359,88€/anno fatturati</p></div><div style="width:22px;height:22px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;color:#fff">✓</div></div>
+</div>
+<div style="background:#1a1a1a;border-radius:16px;padding:14px;text-align:left;margin-top:10px;border:1px solid #333">
+<div style="display:flex;justify-content:space-between;align-items:center"><div><p style="font-weight:700">Settimanale</p><p style="font-size:11px;color:#888">4,99€ a settimana - disdici quando vuoi</p></div><div style="width:22px;height:22px;border-radius:50%;border:1px solid #555"></div></div>
+</div>
+<button class="btn" style="width:100%;margin-top:16px;padding:16px;font-size:16px" onclick="closePay()">Inizia i 3 giorni GRATIS →</button>
+<p style="font-size:10px;color:#555;margin-top:10px;line-height:1.3">Nessun pagamento oggi. Dopo 3 giorni parte 29,99€/mese. Rinnovo automatico, disdici in Impostazioni > Abbonamenti.</p>
+<p style="font-size:11px;color:#666;margin-top:10px;text-decoration:underline" onclick="closePay()">Continua con versione gratis limitata</p>
+</div>
+
 <script>
 const BRANDS=[
-{n:"Balenciaga",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80",d:"Hourglass XS - Croco"},
-{n:"Gucci",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80",d:"Marmont - Matelassé"},
-{n:"Louis Vuitton",img:"https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80",d:"Neverfull - Monogram"},
-{n:"Chanel",img:"https://images.unsplash.com/photo-1583792615411-3f53f6a3fa29?w=600&q=80",d:"Classic Flap"},
-{n:"Prada",img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80",d:"Cleo - Re-Nylon"},
-{n:"Hermès",img:"https://images.unsplash.com/photo-1591561954555-607968c989ab?w=600&q=80",d:"Birkin 30 - Togo"},
-{n:"Saint Laurent",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80",d:"Sac De Jour"},
-{n:"Dior",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80",d:"Saddle - Oblique"}
+{n:"Balenciaga",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80",d:"Hourglass XS - Croco Rosso"},
+{n:"Gucci",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80",d:"GG Marmont - Nero Matelassé"},
+{n:"Louis Vuitton",img:"https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80",d:"Neverfull MM - Monogram"},
+{n:"Chanel",img:"https://images.unsplash.com/photo-1583792615411-3f53f6a3fa29?w=600&q=80",d:"Classic Flap - Lambskin"},
+{n:"Prada",img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80",d:"Cleo - Nero Re-Nylon"},
+{n:"Hermès",img:"https://images.unsplash.com/photo-1614179689702-a67e6c04bf22?w=600&q=80",d:"Birkin 30 - Orange Togo"},
+{n:"Saint Laurent",img:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80",d:"Sac De Jour - Calfskin"},
+{n:"Dior",img:"https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&q=80",d:"Saddle - Oblique Beige"}
 ];
 let cur=0, hasCam=false;
 let wardrobe=JSON.parse(localStorage.getItem('ward')||'[]');
@@ -98,11 +109,24 @@ function renderPills(){document.getElementById('pills').innerHTML=BRANDS.map((b,
 function pick(i){cur=i;document.getElementById('bgBag').src=BRANDS[i].img;document.getElementById('brandImg').src=BRANDS[i].img;document.getElementById('bName').innerText=BRANDS[i].n;document.getElementById('bBtn').innerText=BRANDS[i].n;document.getElementById('bDesc').innerText=BRANDS[i].d;document.getElementById('vBrand').innerText=BRANDS[i].n;renderPills();}
 function startCam(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{let v=document.getElementById('video');v.srcObject=s;v.style.opacity='0.7';document.getElementById('camMsg').style.display='none';hasCam=true;}).catch(()=>noCam());}
 function noCam(){document.getElementById('camMsg').style.display='none';document.getElementById('video').style.display='none';document.getElementById('bgBag').style.opacity='1';hasCam=false;}
-function verifica(){let m=document.getElementById('verifyModal');m.style.display='flex';let snap=document.getElementById('snap');if(hasCam){let v=document.getElementById('video'),c=document.getElementById('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);snap.src=c.toDataURL('image/jpeg');}else{snap.src=BRANDS[cur].img;}document.getElementById('bar').style.width='0%';document.getElementById('checks').innerHTML='';document.getElementById('closeBtn').style.display='none';setTimeout(()=>document.getElementById('bar').style.width='100%',100);let steps=["<span class='dot ok'></span>Cuciture analizzate","<span class='dot ok'></span>Logo e hardware verificati","<span class='dot ok'></span>Pelle autentica","<span class='dot ok'></span>Seriale match","<span class='dot ok'></span><b style='color:#00ff88'>AUTENTICA 98.7% ✓</b>"];let i=0;let it=setInterval(()=>{if(i<steps.length){document.getElementById('checks').innerHTML+=steps[i]+"<br>";i++;}else{clearInterval(it);document.getElementById('closeBtn').style.display='block';}},600);}
+function closePay(){document.getElementById('paywall').style.display='none';localStorage.setItem('pro','1');}
+if(localStorage.getItem('pro')){document.getElementById('paywall').style.display='none';}
+let verCount=parseInt(localStorage.getItem('verCount')||'0');
+function verifica(){
+ verCount++;localStorage.setItem('verCount',verCount);
+ if(verCount>=2 && !localStorage.getItem('pro')){document.getElementById('paywall').style.display='flex';return;}
+ let m=document.getElementById('verifyModal');m.style.display='flex';
+ let snap=document.getElementById('snap');
+ if(hasCam){let v=document.getElementById('video'),c=document.getElementById('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);snap.src=c.toDataURL('image/jpeg');}else{snap.src=BRANDS[cur].img;}
+ document.getElementById('bar').style.width='0%';document.getElementById('checks').innerHTML='';document.getElementById('closeBtn').style.display='none';
+ setTimeout(()=>document.getElementById('bar').style.width='100%',100);
+ let steps=["<span class='dot ok'></span>Cuciture analizzate","<span class='dot ok'></span>Logo e hardware verificati","<span class='dot ok'></span>Pelle autentica","<span class='dot ok'></span>Seriale match","<span class='dot ok'></span><b style='color:#00ff88'>AUTENTICA 98.7% ✓</b>"];
+ let i=0;let it=setInterval(()=>{if(i<steps.length){document.getElementById('checks').innerHTML+=steps[i]+"<br>";i++;}else{clearInterval(it);document.getElementById('closeBtn').style.display='block';}},600);
+}
 function addCloth(e){let r=new FileReader();r.onload=function(ev){wardrobe.push(ev.target.result);localStorage.setItem('ward',JSON.stringify(wardrobe));renderWard();};r.readAsDataURL(e.target.files[0]);}
 function renderWard(){let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');if(wardrobe.length==0){g.innerHTML='';emp.style.display='block';return;}emp.style.display='none';g.innerHTML=wardrobe.map((src,i)=>`<div class="card"><img src="${src}"><div style="padding:6px;display:flex;justify-content:space-between"><span style="font-size:10px;color:#888">Item ${i+1}</span><span onclick="del(${i})" style="color:#ff4444;font-size:12px">✕</span></div></div>`).join('');}
 function del(i){wardrobe.splice(i,1);localStorage.setItem('ward',JSON.stringify(wardrobe));renderWard();}
-function makeOutfit(){if(wardrobe.length<3){alert("Fai almeno 3 foto di vestiti nell'Armadio prima!");go(2);return;}let sh=[...wardrobe].sort(()=>0.5-Math.random());document.getElementById('slotTop').innerHTML=`<img src="${sh[0]}">`;document.getElementById('slotBottom').innerHTML=`<img src="${sh[1]}">`;document.getElementById('slotShoes').innerHTML=`<img src="${sh[2]}">`;}
+function makeOutfit(){if(wardrobe.length<3){alert("Fai almeno 3 foto di vestiti nell'Armadio!");go(2);return;}let sh=[...wardrobe].sort(()=>0.5-Math.random());document.getElementById('slotTop').innerHTML=`<img src="${sh[0]}">`;document.getElementById('slotBottom').innerHTML=`<img src="${sh[1]}">`;document.getElementById('slotShoes').innerHTML=`<img src="${sh[2]}">`;}
 function clearOutfit(){document.getElementById('slotTop').innerHTML='<span style="color:#555">Top</span>';document.getElementById('slotBottom').innerHTML='<span style="color:#555">Bottom</span>';document.getElementById('slotShoes').innerHTML='<span style="color:#555">Scarpe + Borsa</span>';}
 renderPills();renderWard();
 </script></body></html>
