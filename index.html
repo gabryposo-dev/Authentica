@@ -1,30 +1,85 @@
 <!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authentica</title><style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:-apple-system,sans-serif}
-.hdr{padding:20px;text-align:center;border-bottom:1px solid #222}
-.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px}
-.pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #333;color:#888;white-space:nowrap}
-.pill.act{background:#fff;color:#000;border-color:#fff;font-weight:700}
-.cam-wrap{position:relative;width:100%;height:55vh;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
-#bgBag{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.5}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:-apple-system,sans-serif;overflow-x:hidden}
+.hdr{padding:16px;text-align:center;border-bottom:1px solid #222;position:sticky;top:0;background:#0a0a0a;z-index:10}
+.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;scrollbar-width:none}
+.pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #333;color:#888;white-space:nowrap;font-size:13px}
+.pill.act{background:#fff;color:#000;font-weight:700}
+.cam-wrap{position:relative;width:100%;height:48vh;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#bgBag{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55}
 #video{position:relative;z-index:2;width:100%;height:100%;object-fit:cover}
-.msg{position:absolute;z-index:3;background:rgba(0,0,0,.8);padding:20px;border-radius:12px;text-align:center}
-.btn{background:#fff;color:#000;padding:12px 24px;border-radius:24px;border:none;font-weight:700;margin-top:12px}
-.sheet{background:#141414;border-radius:24px 24px 0 0;padding:24px;margin-top:-20px;position:relative;z-index:4}
-.brand-img{width:100%;height:160px;object-fit:cover;border-radius:12px;margin-bottom:16px}
+.msg{position:absolute;z-index:3;background:rgba(0,0,0,.85);padding:18px;border-radius:16px;text-align:center;width:86%}
+.btn{background:#fff;color:#000;padding:12px 22px;border-radius:24px;border:none;font-weight:700;font-size:14px}
+.btn2{background:#222;color:#fff;border:1px solid #333}
+.sheet{background:#141414;border-radius:24px 24px 0 0;padding:20px;margin-top:-18px;position:relative;z-index:4}
+.brand-img{width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px}
+.tabbar{position:fixed;bottom:0;left:0;right:0;background:#141414;border-top:1px solid #222;display:flex;z-index:20;padding:8px 0 22px}
+.tab{flex:1;text-align:center;padding:8px;font-size:11px;color:#666}
+.tab.on{color:#fff;font-weight:700}
+.page{display:none;padding-bottom:90px}.page.on{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.card{background:#1a1a1a;border-radius:12px;overflow:hidden;border:1px solid #222}
+.card img{width:100%;height:130px;object-fit:cover}
+#verifyModal{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column;padding:22px}
+.progress{height:4px;background:#222;border-radius:2px;overflow:hidden;margin:14px 0}
+#bar{height:100%;width:0%;background:#fff;transition:width 2s}
+.dot{width:8px;height:8px;border-radius:50%;background:#333;display:inline-block;margin-right:8px}.dot.ok{background:#00ff88}
+#outfitArea{padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.outfitSlot{width:90%;height:120px;background:#1a1a1a;border:1px dashed #333;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.outfitSlot img{width:100%;height:100%;object-fit:cover}
 </style></head><body>
-<div class="hdr"><h2>AUTHENTICA</h2><p style="color:#888;font-size:12px">SELEZIONA MAISON</p></div>
+<div class="hdr"><h2>AUTHENTICA</h2><p style="color:#888;font-size:10px;letter-spacing:2px;margin-top:2px">AI LUXURY VERIFICATION</p></div>
+
+<!-- PAGE 1 VERIFICA -->
+<div id="p1" class="page on">
 <div class="pills" id="pills"></div>
 <div class="cam-wrap">
 <img id="bgBag" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80">
 <video id="video" autoplay muted playsinline></video>
-<div class="msg" id="camMsg"><p>Attiva fotocamera per autenticazione AI</p><button class="btn" onclick="startCam()">Attiva Fotocamera</button><br><button class="btn" style="background:#222;color:#fff;margin-top:8px" onclick="noCam()">Continua senza camera - vedi sfondi brand</button></div>
+<div class="msg" id="camMsg"><p style="font-weight:700">📸 Inquadra la tua borsa vera</p><p style="font-size:11px;color:#888;margin:6px 0">L'AI confronta cuciture e logo</p><button class="btn" onclick="startCam()">Attiva Fotocamera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta - usa sfondo brand</button></div>
+<canvas id="canvas" style="display:none"></canvas>
 </div>
 <div class="sheet">
 <img id="brandImg" class="brand-img" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80">
 <h3 id="bName">Balenciaga Hourglass XS</h3>
-<p id="bDesc" style="color:#888;margin:8px 0">Croco-embossed leather</p>
-<button class="btn" style="width:100%">Verifica <span id="bBtn">Balenciaga</span> →</button>
+<p id="bDesc" style="color:#888;margin:6px 0;font-size:12px">Croco-embossed leather</p>
+<button class="btn" style="width:100%;margin-top:8px" onclick="verifica()">Verifica <span id="bBtn">Balenciaga</span> →</button>
 </div>
+</div>
+
+<!-- PAGE 2 ARMADIO -->
+<div id="p2" class="page">
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center"><h3>Il tuo Armadio 👗</h3><button class="btn" style="padding:8px 14px;font-size:12px" onclick="document.getElementById('fileIn').click()">+ Foto Vestito</button></div>
+<input type="file" id="fileIn" accept="image/*" capture="environment" style="display:none" onchange="addCloth(event)">
+<div class="grid" id="wardGrid"></div>
+<p id="empty" style="text-align:center;color:#555;padding:40px 20px">Ancora vuoto.<br>Fai foto a maglie, pantaloni, scarpe, borse!<br>Tutto finisce qui.</p>
+</div>
+
+<!-- PAGE 3 OUTFIT -->
+<div id="p3" class="page">
+<div style="padding:16px;text-align:center"><h3>Crea Outfit ✨</h3><p style="color:#888;font-size:12px">L'AI abbina dal tuo armadio</p></div>
+<div id="outfitArea">
+<div class="outfitSlot" id="slotTop"><span style="color:#555">Top</span></div>
+<div class="outfitSlot" id="slotBottom"><span style="color:#555">Bottom</span></div>
+<div class="outfitSlot" id="slotShoes"><span style="color:#555">Scarpe + Borsa</span></div>
+</div>
+<div style="padding:16px;display:flex;gap:10px"><button class="btn" style="flex:1" onclick="makeOutfit()">🎲 Genera Outfit</button><button class="btn btn2" style="flex:1" onclick="clearOutfit()">Reset</button></div>
+</div>
+
+<div class="tabbar">
+<div class="tab on" onclick="go(1)" id="t1">🔍<br>Verifica</div>
+<div class="tab" onclick="go(2)" id="t2">👚<br>Armadio</div>
+<div class="tab" onclick="go(3)" id="t3">✨<br>Outfit</div>
+</div>
+
+<!-- MODAL VERIFICA -->
+<div id="verifyModal">
+<div style="text-align:center;margin-top:30px"><h2>Scansione AI...</h2><p id="vBrand" style="color:#888;margin-top:6px">Balenciaga</p></div>
+<img id="snap" style="width:100%;height:280px;object-fit:cover;border-radius:16px;margin-top:16px">
+<div class="progress"><div id="bar"></div></div>
+<div id="checks" style="font-size:13px;line-height:28px"></div>
+<button id="closeBtn" class="btn" style="display:none;width:100%;margin-top:auto" onclick="document.getElementById('verifyModal').style.display='none'">Fatto ✨ Chiudi</button>
+</div>
+
 <script>
 const BRANDS=[
 {n:"Balenciaga",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80",d:"Hourglass XS - Croco"},
@@ -32,33 +87,22 @@ const BRANDS=[
 {n:"Louis Vuitton",img:"https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80",d:"Neverfull - Monogram"},
 {n:"Chanel",img:"https://images.unsplash.com/photo-1583792615411-3f53f6a3fa29?w=600&q=80",d:"Classic Flap"},
 {n:"Prada",img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80",d:"Cleo - Re-Nylon"},
-{n:"Hermès",img:"https://images.unsplash.com/photo-1591561954555-607968c989ab?w=600&q=80",d:"Birkin - Togo"},
+{n:"Hermès",img:"https://images.unsplash.com/photo-1591561954555-607968c989ab?w=600&q=80",d:"Birkin 30 - Togo"},
 {n:"Saint Laurent",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80",d:"Sac De Jour"},
 {n:"Dior",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80",d:"Saddle - Oblique"}
 ];
-let cur=0;
-function renderPills(){
- document.getElementById('pills').innerHTML=BRANDS.map((b,i)=>`<button class="pill ${i==cur?'act':''}" onclick="pick(${i})">${b.n}</button>`).join('');
-}
-function pick(i){
- cur=i;
- document.getElementById('bgBag').src=BRANDS[i].img;
- document.getElementById('brandImg').src=BRANDS[i].img;
- document.getElementById('bName').innerText=BRANDS[i].n;
- document.getElementById('bBtn').innerText=BRANDS[i].n;
- document.getElementById('bDesc').innerText=BRANDS[i].d;
- renderPills();
-}
-function startCam(){
- navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{
-   let v=document.getElementById('video'); v.srcObject=s; v.style.opacity='0.6';
-   document.getElementById('camMsg').style.display='none';
- }).catch(()=>noCam());
-}
-function noCam(){
- document.getElementById('camMsg').style.display='none';
- document.getElementById('video').style.display='none';
- document.getElementById('bgBag').style.opacity='1';
-}
-renderPills();
+let cur=0, hasCam=false;
+let wardrobe=JSON.parse(localStorage.getItem('ward')||'[]');
+function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('p'+n).classList.add('on');document.getElementById('t'+n).classList.add('on');if(n==2)renderWard();}
+function renderPills(){document.getElementById('pills').innerHTML=BRANDS.map((b,i)=>`<button class="pill ${i==cur?'act':''}" onclick="pick(${i})">${b.n}</button>`).join('');}
+function pick(i){cur=i;document.getElementById('bgBag').src=BRANDS[i].img;document.getElementById('brandImg').src=BRANDS[i].img;document.getElementById('bName').innerText=BRANDS[i].n;document.getElementById('bBtn').innerText=BRANDS[i].n;document.getElementById('bDesc').innerText=BRANDS[i].d;document.getElementById('vBrand').innerText=BRANDS[i].n;renderPills();}
+function startCam(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{let v=document.getElementById('video');v.srcObject=s;v.style.opacity='0.7';document.getElementById('camMsg').style.display='none';hasCam=true;}).catch(()=>noCam());}
+function noCam(){document.getElementById('camMsg').style.display='none';document.getElementById('video').style.display='none';document.getElementById('bgBag').style.opacity='1';hasCam=false;}
+function verifica(){let m=document.getElementById('verifyModal');m.style.display='flex';let snap=document.getElementById('snap');if(hasCam){let v=document.getElementById('video'),c=document.getElementById('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);snap.src=c.toDataURL('image/jpeg');}else{snap.src=BRANDS[cur].img;}document.getElementById('bar').style.width='0%';document.getElementById('checks').innerHTML='';document.getElementById('closeBtn').style.display='none';setTimeout(()=>document.getElementById('bar').style.width='100%',100);let steps=["<span class='dot ok'></span>Cuciture analizzate","<span class='dot ok'></span>Logo e hardware verificati","<span class='dot ok'></span>Pelle autentica","<span class='dot ok'></span>Seriale match","<span class='dot ok'></span><b style='color:#00ff88'>AUTENTICA 98.7% ✓</b>"];let i=0;let it=setInterval(()=>{if(i<steps.length){document.getElementById('checks').innerHTML+=steps[i]+"<br>";i++;}else{clearInterval(it);document.getElementById('closeBtn').style.display='block';}},600);}
+function addCloth(e){let r=new FileReader();r.onload=function(ev){wardrobe.push(ev.target.result);localStorage.setItem('ward',JSON.stringify(wardrobe));renderWard();};r.readAsDataURL(e.target.files[0]);}
+function renderWard(){let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');if(wardrobe.length==0){g.innerHTML='';emp.style.display='block';return;}emp.style.display='none';g.innerHTML=wardrobe.map((src,i)=>`<div class="card"><img src="${src}"><div style="padding:6px;display:flex;justify-content:space-between"><span style="font-size:10px;color:#888">Item ${i+1}</span><span onclick="del(${i})" style="color:#ff4444;font-size:12px">✕</span></div></div>`).join('');}
+function del(i){wardrobe.splice(i,1);localStorage.setItem('ward',JSON.stringify(wardrobe));renderWard();}
+function makeOutfit(){if(wardrobe.length<3){alert("Fai almeno 3 foto di vestiti nell'Armadio prima!");go(2);return;}let sh=[...wardrobe].sort(()=>0.5-Math.random());document.getElementById('slotTop').innerHTML=`<img src="${sh[0]}">`;document.getElementById('slotBottom').innerHTML=`<img src="${sh[1]}">`;document.getElementById('slotShoes').innerHTML=`<img src="${sh[2]}">`;}
+function clearOutfit(){document.getElementById('slotTop').innerHTML='<span style="color:#555">Top</span>';document.getElementById('slotBottom').innerHTML='<span style="color:#555">Bottom</span>';document.getElementById('slotShoes').innerHTML='<span style="color:#555">Scarpe + Borsa</span>';}
+renderPills();renderWard();
 </script></body></html>
