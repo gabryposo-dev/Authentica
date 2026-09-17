@@ -10,12 +10,12 @@ body{background:#ECE6DF;display:flex;justify-content:center}
 .brand-title{padding:0 22px;margin-top:10px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8a7d75;font-weight:600}
 .brand-scroll{display:flex;gap:9px;overflow-x:auto;padding:12px 22px;scrollbar-width:none}
 .brand-scroll::-webkit-scrollbar{display:none}
-.b-pill{white-space:nowrap;padding:10px 18px;border-radius:999px;background:white;border:1px solid #E8E0D8;font-size:12px;font-weight:600;cursor:pointer}
+.b-pill{white-space:nowrap;padding:10px 18px;border-radius:999px;background:white;border:1px solid #E8E0D8;font-size:12px;font-weight:600;cursor:pointer;transition:.2s}
 .b-pill.sel{background:#111;color:white;border-color:#111;transform:scale(1.05)}
 .cam-wrap{margin:14px 16px;flex:1;background:#111;border-radius:28px;position:relative;overflow:hidden;min-height:600px;display:flex;flex-direction:column}
 video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
-.bg-bag{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:.9}
-.scan-frame{width:76%;height:52%;border:1.8px solid white;border-radius:22px;margin:auto;position:relative;z-index:3}
+.bg-bag{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;opacity:1;transition:.5s}
+.scan-frame{width:76%;height:52%;border:1.8px solid white;border-radius:22px;margin:auto;position:relative;z-index:3;box-shadow:0 0 0 2000px rgba(0,0,0,.15)}
 .corner{position:absolute;width:22px;height:22px;border:2.5px solid white}
 .bottom-sheet{background:#F6F1EC;border-radius:26px 26px 0 0;padding:16px 18px 12px;margin-top:auto;z-index:4;position:relative}
 .detect{font-size:11px;text-align:center;color:#6b5e57;margin-bottom:10px}
@@ -33,21 +33,21 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:
 </style></head><body><div class="phone">
 <div class="top"><span>←</span><span class="logo">AUTHENTICA</span><span>•••</span></div>
 <div class="view active" id="v-scan">
-<div class="brand-title">Seleziona Maison — 10 Brand Top</div>
+<div class="brand-title">Seleziona Maison — Sfondo cambia!</div>
 <div class="brand-scroll" id="scroll"></div>
 <div class="cam-wrap">
 <img class="bg-bag" id="bgBag" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80" alt="Borsa lusso">
 <video id="video" autoplay playsinline muted></video>
-<div id="camMsg" style="position:absolute;inset:0;z-index:5;background:rgba(17,17,17,.88);display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;border-radius:28px">
+<div id="camMsg" style="position:absolute;inset:0;z-index:5;background:rgba(17,17,17,.92);display:none;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:24px;border-radius:28px">
 <div style="font-size:36px;margin-bottom:10px">📸</div>
 <h3 style="font-weight:700;font-size:16px">Vuoi accendere la fotocamera<br>per scoprire l'originalità?</h3>
 <p style="font-size:11px;opacity:.6;margin:10px 0 18px;line-height:1.4">Attiva la fotocamera per inquadrare<br>la tua borsa nella cornice e verificare<br>se è autentica al 100%</p>
 <button onclick="startCam()" style="background:white;color:black;border:none;border-radius:999px;padding:13px 28px;font-weight:700;font-size:13px">✨ Attiva Fotocamera</button>
-<div style="font-size:10px;opacity:.4;margin-top:12px" onclick="document.getElementById('camMsg').style.display='none'">Continua senza camera (demo)</div>
+<div style="font-size:11px;opacity:.5;margin-top:14px;text-decoration:underline" onclick="document.getElementById('camMsg').style.display='none';document.getElementById('bgBag').style.display='block';">Continua senza camera - vedi sfondi brand</div>
 </div>
 <div class="overlay">
 <div class="scan-frame"><div class="corner" style="top:-2px;left:-2px;border-right:none;border-bottom:none;border-radius:10px 0 0 0"></div><div class="corner" style="top:-2px;right:-2px;border-left:none;border-bottom:none;border-radius:0 10px 0 0"></div><div class="corner" style="bottom:-2px;left:-2px;border-right:none;border-top:none;border-radius:0 0 0 10px"></div><div class="corner" style="bottom:-2px;right:-2px;border-left:none;border-top:none;border-radius:0 0 10px 0"></div></div><div class="bottom-sheet">
-<div class="detect" id="detect">✨ Scegli un brand in alto per verificare</div>
+<div class="detect" id="detect">✨ Scegli un brand in alto - guarda lo sfondo!</div>
 <button class="btn" id="btn" disabled onclick="doScan()">Seleziona un brand</button>
 <div class="count" id="cnt">3 verifiche gratis • 10 maisons di lusso</div>
 <div class="tabs"><div class="tab active">📸<br>Scan</div><div class="tab" onclick="showV('arm')">👗<br>Armadio</div><div class="tab" onclick="showV('out')">✨<br>Outfit</div></div>
@@ -62,23 +62,25 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:
 <script>
 const BRANDS=[
 {name:'Gucci',checks:['GG allineato','Rombo','Seriale'],img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80'},
-{name:'Louis Vuitton',checks:['Monogram','Cucitura gialla','Data code'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'},
+{name:'Louis Vuitton',checks:['Monogram','Cucitura gialla','Data code'],img:'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80'},
 {name:'Chanel',checks:['Quilt','Chiusura CC','Ologramma'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'},
 {name:'Prada',checks:['Placca smaltata','Triangolo','Zip Lampo'],img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80'},
-{name:'Dior',checks:['Cannage','Metallo','Etichetta'],img:'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80'},
+{name:'Dior',checks:['Cannage','Metallo','Etichetta'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80&sat=-100'},
 {name:'Hermès',checks:['Togo','Punti sella','Timbro'],img:'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&q=80'},
-{name:'Saint Laurent',checks:['YSL metallo','Pelle liscia','Logo interno'],img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80'},
-{name:'Balenciaga',checks:['Agnello','Tessuta','Hardware'],img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80'},
-{name:'Fendi',checks:['FF Zucca','Selleria','Placca Fendi'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'},
-{name:'Bottega',checks:['Intrecciato','Pelle morbida','No logo'],img:'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=600&q=80'},
-] ;
+{name:'Saint Laurent',checks:['YSL metallo','Pelle liscia','Logo interno'],img:'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=600&q=80'},
+{name:'Balenciaga',checks:['Agnello','Tessuta','Hardware'],img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80&auto=format&fit=crop&crop=top'},
+{name:'Fendi',checks:['FF Zucca','Selleria','Placca Fendi'],img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80'},
+{name:'Bottega',checks:['Intrecciato','Pelle morbida','No logo'],img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80&sat=-50'},
+];
 let sel=null,free=parseInt(localStorage.getItem('auth_lux2')||'3'),arm=JSON.parse(localStorage.getItem('auth_armL2')||'[]');
 const sc=document.getElementById('scroll');
 BRANDS.forEach((b,i)=>{let d=document.createElement('div');d.className='b-pill';d.innerText=b.name;d.onclick=()=>pick(i);sc.appendChild(d);});
 function pick(i){
- sel=BRANDS[i];document.getElementById('bgBag').src=sel.img;
+ sel=BRANDS[i];
+ document.getElementById('bgBag').src=sel.img;
+ document.getElementById('bgBag').style.display='block';
  document.querySelectorAll('.b-pill').forEach((e,j)=>e.classList.toggle('sel',j==i));
- document.getElementById('detect').innerText='Pronta per '+sel.name+' • Inquadra nella cornice';
+ document.getElementById('detect').innerText='✓ '+sel.name+' selezionato • Sfondo cambiato! Inquadra nella cornice';
  let bt=document.getElementById('btn');
  bt.disabled=false;
  bt.innerText='Verifica '+sel.name+' ✨';
