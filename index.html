@@ -61,22 +61,22 @@ video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:
 <canvas id="c" style="display:none"></canvas>
 <script>
 const BRANDS=[
-{name:'Gucci',checks:['GG allineato','Rombo','Seriale']},
-{name:'Louis Vuitton',checks:['Monogram','Cucitura gialla','Data code']},
-{name:'Chanel',checks:['Quilt','Chiusura CC','Ologramma']},
-{name:'Prada',checks:['Placca smaltata','Triangolo','Zip Lampo']},
-{name:'Dior',checks:['Cannage','Metallo','Etichetta']},
-{name:'Hermès',checks:['Togo','Punti sella','Timbro']},
-{name:'Saint Laurent',checks:['YSL metallo','Pelle liscia','Logo interno']},
-{name:'Balenciaga',checks:['Agnello','Tessuta','Hardware']},
-{name:'Fendi',checks:['FF Zucca','Selleria','Placca Fendi']},
-{name:'Bottega',checks:['Intrecciato','Pelle morbida','No logo']},
-];
+{name:'Gucci',checks:['GG allineato','Rombo','Seriale'],img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80'},
+{name:'Louis Vuitton',checks:['Monogram','Cucitura gialla','Data code'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'},
+{name:'Chanel',checks:['Quilt','Chiusura CC','Ologramma'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'},
+{name:'Prada',checks:['Placca smaltata','Triangolo','Zip Lampo'],img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80'},
+{name:'Dior',checks:['Cannage','Metallo','Etichetta'],img:'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=600&q=80'},
+{name:'Hermès',checks:['Togo','Punti sella','Timbro'],img:'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&q=80'},
+{name:'Saint Laurent',checks:['YSL metallo','Pelle liscia','Logo interno'],img:'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80'},
+{name:'Balenciaga',checks:['Agnello','Tessuta','Hardware'],img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80'},
+{name:'Fendi',checks:['FF Zucca','Selleria','Placca Fendi'],img:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'},
+{name:'Bottega',checks:['Intrecciato','Pelle morbida','No logo'],img:'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=600&q=80'},
+] ;
 let sel=null,free=parseInt(localStorage.getItem('auth_lux2')||'3'),arm=JSON.parse(localStorage.getItem('auth_armL2')||'[]');
 const sc=document.getElementById('scroll');
 BRANDS.forEach((b,i)=>{let d=document.createElement('div');d.className='b-pill';d.innerText=b.name;d.onclick=()=>pick(i);sc.appendChild(d);});
 function pick(i){
- sel=BRANDS[i];
+ sel=BRANDS[i];document.getElementById('bgBag').src=sel.img;
  document.querySelectorAll('.b-pill').forEach((e,j)=>e.classList.toggle('sel',j==i));
  document.getElementById('detect').innerText='Pronta per '+sel.name+' • Inquadra nella cornice';
  let bt=document.getElementById('btn');
