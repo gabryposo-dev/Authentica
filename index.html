@@ -1,67 +1,86 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Authentica</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentica - 10 Marche</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:sans-serif;background:#EDE8E3;display:flex;justify-content:center}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+body{background:#EDE8E3;display:flex;justify-content:center}
 .phone{width:390px;background:#000;min-height:100vh;display:flex;flex-direction:column}
-.header{display:flex;justify-content:space-between;padding:14px 20px;background:#EDE8E3;font-weight:700}
-.view{flex:1;display:none;flex-direction:column}
-.view.active{display:flex}
-.camera-box{flex:1;position:relative;background:#111;overflow:hidden;height:700px}
+.header{display:flex;justify-content:space-between;padding:14px 20px;background:#EDE8E3;font-weight:800;letter-spacing:1px}
+.view{display:none;flex:1;flex-direction:column}.view.active{display:flex}
+.camera-box{flex:1;position:relative;background:#111;height:720px;overflow:hidden}
 video{width:100%;height:100%;object-fit:cover}
-#perm{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#111;color:white;padding:30px;text-align:center;z-index:5}
-.frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);width:84%;height:60%;z-index:2;display:none;border:2px solid white;border-radius:12px}
-.bottom{position:absolute;bottom:0;left:0;right:0;background:#F5F1ED;border-radius:28px 28px 0 0;padding:18px 20px;z-index:4}
-.btn{width:100%;background:#1a1a1a;color:white;border:none;border-radius:999px;padding:16px;font-weight:600;cursor:pointer}
-.counter{text-align:center;font-size:11px;margin-top:10px}
-.tabs{display:flex;justify-content:space-around;margin-top:14px;border-top:1px solid #0001;padding-top:12px}
-.tab{opacity:0.4;cursor:pointer;text-align:center}.tab.active{opacity:1}
-.arm-view{background:#F5F1ED;padding:20px;flex:1;overflow-y:auto}
-.arm-card{background:white;border-radius:18px;padding:12px;display:flex;gap:12px;margin-bottom:12px}
-.arm-img{width:64px;height:64px;border-radius:12px;object-fit:cover;background:#EDE8E3}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:100;padding:22px}
-.modal.show{display:flex}
-.card{background:white;border-radius:26px;padding:26px;width:100%;max-width:340px;text-align:center}
-.price{background:#1a1a1a;color:white;border-radius:16px;padding:14px;margin:14px 0}
+.overlay{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column}
+.brand-bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;background:rgba(245,241,237,0.95);border-radius:0 0 20px 20px}
+.brand{padding:10px;border-radius:12px;background:white;border:2px solid transparent;text-align:center;font-size:11px;font-weight:600;cursor:pointer}
+.brand.sel{border-color:#000;background:#000;color:white}
+.frame{flex:1;display:flex;align-items:center;justify-content:center}
+.frame-box{width:82%;height:52%;border:2px solid white;border-radius:16px;position:relative}
+.corner{position:absolute;width:18px;height:18px;border:3px solid white}
+.bottom{position:absolute;bottom:0;left:0;right:0;background:#F5F1ED;border-radius:26px 26px 0 0;padding:16px 18px;z-index:5}
+.btn{width:100%;background:#1a1a1a;color:white;border:none;border-radius:999px;padding:15px;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.3}
+.counter{text-align:center;font-size:10px;margin-top:8px;color:#8a7d75}
+.tabs{display:flex;justify-content:space-around;margin-top:12px;border-top:1px solid #0001;padding-top:10px}
+.tab{opacity:.4;text-align:center;cursor:pointer;font-size:12px}.tab.active{opacity:1;font-weight:700}
+.arm{background:#F5F1ED;flex:1;padding:18px;overflow-y:auto}
+.card-w{background:white;border-radius:18px;padding:12px;display:flex;gap:10px;margin-bottom:10px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:99;padding:20px}.modal.show{display:flex}
+.mcard{background:white;border-radius:26px;padding:24px;width:100%;max-width:340px;text-align:center}
+.chip{display:inline-block;background:#EDE8E3;border-radius:999px;padding:4px 10px;font-size:10px;margin:3px}
+.detect{text-align:center;font-size:10px;color:#6b5e57;margin-bottom:10px;min-height:12px}
 </style>
 </head>
 <body>
 <div class="phone">
-<div class="header"><span>◀</span><span>AUTHENTICA</span><span>ⓘ</span></div>
-<div class="view active" id="view-scan">
+<div class="header"><span>◀</span><span>AUTHENTICA</span><span>●●●</span></div>
+<div class="view active" id="v-scan">
 <div class="camera-box">
 <video id="video" autoplay playsinline muted></video>
-<div id="perm"><h3>📸 Attiva fotocamera</h3><p style="font-size:13px;opacity:.7;margin:10px 0 18px">Inquadra la tua Prada per verifica AI</p><button class="btn" style="background:white;color:black;width:auto;padding:12px 30px" onclick="startCam()">Avvia Fotocamera</button></div>
-<div class="frame" id="frame"></div>
+<div class="overlay">
+<div class="brand-bar" id="brandBar"></div><div class="frame"><div class="frame-box"><div class="corner" style="top:-2px;left:-2px;border-right:none;border-bottom:none"></div><div class="corner" style="top:-2px;right:-2px;border-left:none;border-bottom:none"></div><div class="corner" style="bottom:-2px;left:-2px;border-right:none;border-top:none"></div><div class="corner" style="bottom:-2px;right:-2px;border-left:none;border-top:none"></div></div></div>
 <div class="bottom">
-<div style="font-size:10px;color:#8a7d75;text-align:center;margin-bottom:12px" id="detected">In attesa fotocamera...</div>
-<button class="btn" id="verifyBtn" onclick="doVerify()" disabled>Verifica Autenticita</button>
-<div class="counter" id="counter">3 controlli gratis rimasti</div><div class="tabs"><div class="tab active" onclick="showView('scan')">📸<br><small>Scan</small></div><div class="tab" onclick="showView('armadio')">👗<br><small>Armadio</small></div><div class="tab" onclick="showView('outfit')">✨<br><small>Outfit</small></div></div>
+<div class="detect" id="detect">Seleziona una marca in alto per iniziare</div>
+<button class="btn" id="btn" onclick="doScan()" disabled>Seleziona marca per verificare</button>
+<div class="counter" id="cnt">3 gratis rimasti • 10 marche supportate</div>
+<div class="tabs"><div class="tab active">📸<br>Scan</div><div class="tab" onclick="show('arm')">👗<br>Armadio</div><div class="tab" onclick="show('out')">✨<br>Outfit</div></div>
+</div>
+</div>
+<div id="perm" style="position:absolute;inset:0;background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;z-index:2;text-align:center;padding:30px">
+<div style="font-size:40px">📸</div><h3 style="margin:10px 0">Fotocamera pronta</h3><p style="font-size:12px;opacity:.6;margin-bottom:18px">Seleziona una marca e avvia</p><button class="btn" style="background:white;color:black;width:auto;padding:12px 28px" onclick="startCam()">Avvia Fotocamera</button>
 </div>
 </div>
 </div>
-<div class="view" id="view-armadio"><div class="arm-view"><h2>Il tuo Armadio</h2><p id="arm-count" style="font-size:12px;color:#8a7d75;margin-bottom:16px">0 capi</p><div id="arm-list"><p style="text-align:center;color:#999;margin-top:40px">Nessun capo ancora.</p></div><div class="tabs"><div class="tab" onclick="showView('scan')">📸<br><small>Scan</small></div><div class="tab active">👗<br><small>Armadio</small></div><div class="tab" onclick="showView('outfit')">✨<br><small>Outfit</small></div></div></div></div>
-<div class="view" id="view-outfit"><div class="arm-view"><h2>Outfit AI</h2><p style="font-size:13px;color:#666;margin-top:12px">Prossimamente: outfit con i tuoi capi verificati. 🔜</p><div class="tabs"><div class="tab" onclick="showView('scan')">📸<br><small>Scan</small></div><div class="tab" onclick="showView('armadio')">👗<br><small>Armadio</small></div><div class="tab active">✨<br><small>Outfit</small></div></div></div></div>
+<div class="view" id="v-arm"><div class="arm"><h2>Armadio</h2><div id="armCount" style="font-size:11px;color:#8a7d75;margin:6px 0 14px">0 capi</div><div id="armList"><p style="text-align:center;color:#999;margin-top:40px">Verifica la tua prima borsa!<br>10 marche disponibili</p></div><div class="tabs"><div class="tab" onclick="show('scan')">📸<br>Scan</div><div class="tab active">👗<br>Armadio</div><div class="tab" onclick="show('out')">✨<br>Outfit</div></div></div></div>
+<div class="view" id="v-out"><div class="arm"><h2>Outfit AI</h2><p style="font-size:13px;color:#666;margin-top:10px">Outfit con i tuoi 10 brand verificati in arrivo.</p></div></div>
 </div>
-<div class="modal" id="modal"><div class="card"><div style="font-size:44px">✅</div><h2 id="mTitle">Originale 98.7%</h2><p id="mText" style="font-size:13px;color:#666;margin:10px 0"></p><img id="snap" style="width:100%;border-radius:12px;margin-bottom:12px;display:none"><button class="btn" onclick="closeModal()">Aggiungi all'Armadio</button></div></div>
-<div class="modal" id="paywall"><div class="card"><div style="font-size:40px">🔒</div><h2>Hai finito i gratis</h2><p style="font-size:13px;color:#666;margin:10px 0">Sblocca verifiche illimitate, armadio infinito e outfit AI.</p><div class="price"><div style="font-size:22px;font-weight:700">4,99€ / mese</div><div style="font-size:11px;opacity:.7">3 giorni gratis</div></div><button class="btn" onclick="subscribe()">Sblocca Illimitato - Prova Gratis</button></div></div>
+<div class="modal" id="modal"><div class="mcard"><div id="mIcon" style="font-size:44px">✅</div><h2 id="mTitle">Originale</h2><div id="mChips" style="margin:10px 0"></div><img id="snap" style="width:100%;border-radius:12px;margin:10px 0;display:none"><p id="mText" style="font-size:12px;color:#666"></p><button class="btn" style="margin-top:12px" onclick="addToArm()">Aggiungi all'Armadio</button></div></div>
+<div class="modal" id="pay"><div class="mcard"><div style="font-size:40px">🔒</div><h2>Finito i gratis</h2><p style="font-size:13px;color:#666;margin:10px 0">Sblocca 10 marche illimitate, armadio e outfit AI</p><div style="background:#111;color:white;border-radius:16px;padding:14px;margin:12px 0"><div style="font-size:20px;font-weight:800">4,99€ / mese</div><div style="font-size:11px;opacity:.7">3 giorni gratis</div></div><button class="btn" onclick="unlock()">Sblocca 10 marche • Prova gratis</button></div></div>
 <canvas id="canvas" style="display:none"></canvas>
 <script>
-let free=parseInt(localStorage.getItem('auth_free')||'3');
-let armadio=JSON.parse(localStorage.getItem('auth_arm')||'[]');
-let stream=null;
-function updateCounter(){document.getElementById('counter').innerText=free>0?free+' controlli gratis rimasti':'Nessun controllo - Abbonati';localStorage.setItem('auth_free',free);if(free<=0)document.getElementById('verifyBtn').innerText='Sblocca Illimitato 🔒';}
-function renderArm(){document.getElementById('arm-count').innerText=armadio.length+' capi verificati';let list=document.getElementById('arm-list');if(armadio.length==0){list.innerHTML='<p style="text-align:center;color:#999;margin-top:40px">Nessun capo ancora.<br>Verifica la prima borsa!</p>';return;}list.innerHTML=armadio.map(i=>`<div class="arm-card"><img class="arm-img" src="${i.img}"><div><div style="font-size:13px;font-weight:600">${i.name}</div><div style="font-size:11px;color:#3a9a5a">✓ Originale ${i.perc}%</div><div style="font-size:10px;color:#999">${i.date}</div></div></div>`).join('');}
-updateCounter();renderArm();
-function showView(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById('view-'+v).classList.add('active')}
-async function startCam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});document.getElementById('video').srcObject=stream;document.getElementById('perm').style.display='none';document.getElementById('frame').style.display='block';document.getElementById('verifyBtn').disabled=false;document.getElementById('detected').innerText='Rilevato: Prada Nylon • Logo confermato';}catch(e){alert('Apri il link in Safari e Consenti fotocamera')}}
-function doVerify(){if(free<=0){document.getElementById('paywall').classList.add('show');return;}const v=document.getElementById('video');const c=document.getElementById('canvas');const s=document.getElementById('snap');c.width=v.videoWidth||640;c.height=v.videoHeight||480;c.getContext('2d').drawImage(v,0,0);const data=c.toDataURL('image/jpeg');s.src=data;s.style.display='block';const btn=document.getElementById('verifyBtn');btn.innerText='Analizzando AI...';btn.disabled=true;setTimeout(()=>{const perc=(96+Math.random()*3).toFixed(1);document.getElementById('mTitle').innerText='Originale '+perc+'%';document.getElementById('mText').innerText='Prada Re-Edition verificata. Cuciture e placca confermate.';document.getElementById('modal').classList.add('show');window._lastSnap=data;window._lastPerc=perc;btn.innerText='Verifica Autenticita';btn.disabled=false;},1800);}
-function closeModal(){const item={id:Date.now(),name:'Prada Re-Edition 2005',perc:window._lastPerc,img:window._lastSnap,date:new Date().toLocaleDateString()};armadio.unshift(item);localStorage.setItem('auth_arm',JSON.stringify(armadio));free--;localStorage.setItem('auth_free',free);updateCounter();renderArm();document.getElementById('modal').classList.remove('show');showView('armadio');}
-function subscribe(){alert('Qui collegheremo Stripe! Per ora sblocco test gratis');free=100;updateCounter();document.getElementById('paywall').classList.remove('show');}
+const BRANDS=[
+{name:'Gucci',checks:['Logo GG allineato','Cucitura a rombi','Seriale cuoio']},
+{name:'Louis Vuitton',checks:['Monogram simmetrico','Cucitura gialla','Data code']},
+{name:'Chanel',checks:['Quilt allineato','Chiusura CC','Ologramma']},{name:'Prada',checks:['Placca smaltata','Triangolo centrato','Zip Lampo']},
+{name:'Dior',checks:['Cannage perfetto','Logo metallo','Etichetta interna']},
+{name:'Hermès',checks:['Pelle togo','Punti sella','Timbro a caldo']},
+{name:'Saint Laurent',checks:['YSL metallo','Pelle liscia','Logo interno']},
+{name:'Balenciaga',checks:['Pelle agnello','Etichetta tessuta','Hardware pesante']},
+{name:'Fendi',checks:['FF Zucca','Cucitura Selleria','Placca Fendi']},
+{name:'Bottega',checks:['Intrecciato continuo','Pelle morbida','Senza logo']},
+];
+let selected=null;let free=parseInt(localStorage.getItem('auth_free10')||'3');let arm=JSON.parse(localStorage.getItem('auth_arm10')||'[]');
+const bar=document.getElementById('brandBar');
+BRANDS.forEach((b,i)=>{let d=document.createElement('div');d.className='brand';d.innerText=b.name;d.onclick=()=>selBrand(i);bar.appendChild(d);});
+function selBrand(i){selected=BRANDS[i];document.querySelectorAll('.brand').forEach((e,j)=>e.classList.toggle('sel',j==i));document.getElementById('detect').innerText='Pronta per: '+selected.name+' • '+selected.checks[0];document.getElementById('btn').disabled=false;document.getElementById('btn').innerText='Verifica '+selected.name+' ✨';}
+function update(){document.getElementById('cnt').innerText=(free>0?free+' gratis rimasti':'Abbonati')+' • 10 marche';document.getElementById('armCount').innerText=arm.length+' capi • '+[...new Set(arm.map(a=>a.brand))].length+' marche';let l=document.getElementById('armList');if(!arm.length){l.innerHTML='<p style="text-align:center;color:#999;margin-top:40px">Nessun capo.<br>Seleziona una marca e verifica!</p>';return;}l.innerHTML=arm.map(o=>`<div class="card-w"><img src="${o.img}" style="width:60px;height:60px;border-radius:12px;object-fit:cover"><div><div style="font-size:12px;font-weight:700">${o.brand} • ${o.model}</div><div style="font-size:10px;color:#2e8b57">✓ ${o.perc}% originale</div><div style="font-size:9px;color:#999">${o.date}</div><div>${o.checks.map(c=>`<span class="chip">✓ ${c}</span>`).join('')}</div></div></div>`).join('');}
+update();
+function show(v){document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));document.getElementById('v-'+v).classList.add('active');}
+async function startCam(){try{let s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});document.getElementById('video').srcObject=s;document.getElementById('perm').style.display='none';}catch(e){alert('Apri in Safari e consenti fotocamera');}}
+function doScan(){if(!selected)return alert('Seleziona una marca sopra!');if(free<=0){document.getElementById('pay').classList.add('show');return;}const v=document.getElementById('video'),c=document.getElementById('canvas'),snap=document.getElementById('snap');c.width=v.videoWidth||640;c.height=v.videoHeight||480;c.getContext('2d').drawImage(v,0,0);const data=c.toDataURL('image/jpeg');snap.src=data;snap.style.display='block';let btn=document.getElementById('btn');btn.innerText='Analizzando '+selected.name+' con AI...';btn.disabled=true;setTimeout(()=>{const perc=(95+Math.random()*4.5).toFixed(1);document.getElementById('mTitle').innerText=selected.name+' • Originale '+perc+'%';document.getElementById('mChips').innerHTML=selected.checks.map(c=>`<span class="chip">✓ ${c}</span>`).join('');document.getElementById('mText').innerText=selected.name+' verificata: '+selected.checks.join(', ')+' confermati. Prodotto autentico.';document.getElementById('modal').classList.add('show');window._last={brand:selected.name,model:selected.name+' Bag',perc,data,checks:selected.checks};btn.innerText='Verifica '+selected.name+' ✨';btn.disabled=false;},1800);}
+function addToArm(){let o={...window._last,date:new Date().toLocaleDateString(),id:Date.now()};arm.unshift(o);free--;localStorage.setItem('auth_free10',free);localStorage.setItem('auth_arm10',JSON.stringify(arm));update();document.getElementById('modal').classList.remove('show');show('arm');}
+function unlock(){free=100;localStorage.setItem('auth_free10',free);update();document.getElementById('pay').classList.remove('show');}
 </script>
 </body>
 </html>
