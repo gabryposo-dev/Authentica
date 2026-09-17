@@ -95,6 +95,11 @@ async function startCam(){
   let s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
   document.getElementById('video').srcObject=s;
   document.getElementById('video').onloadedmetadata=()=>{
+    document.getElementById('bgBag').style.display='block';
+    document.getElementById('bgBag').style.opacity='0.35';
+    document.getElementById('video').style.opacity='0.7';
+    document.getElementById('camMsg').style.display='none';
+  };
     document.getElementById('bgBag').style.display='none';
     document.getElementById('camMsg').style.display='none';
   };
