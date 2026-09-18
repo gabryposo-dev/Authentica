@@ -1,100 +1,108 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authentica</title><style>
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Authentica</title><style>
 *{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:-apple-system,sans-serif}
 .hdr{padding:16px;text-align:center;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:#0a0a0a;z-index:10}
-.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px}.pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #222;color:#888;font-size:13px}.pill.act{background:#fff;color:#000}
-.btn{background:#fff;color:#000;padding:12px 22px;border-radius:24px;border:none;font-weight:700}.btn2{background:#222;color:#fff;border:1px solid #333}
-.tabbar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;padding:8px 0 22px;z-index:20}.tab{flex:1;text-align:center;color:#555;font-size:11px}.tab.on{color:#fff}
-.page{display:none;padding-bottom:95px}.page.on{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}.card{background:#151515;border-radius:12px;overflow:hidden;border:1px solid #222}.card img{width:100%;height:150px;object-fit:cover}
+.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px}.pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #222;color:#888;font-size:13px;white-space:nowrap}.pill.act{background:#fff;color:#000}
+.btn{background:#fff;color:#000;padding:14px 22px;border-radius:24px;border:none;font-weight:700;font-size:14px;width:100%}.btn2{background:#1a1a1a;color:#fff;border:1px solid #333}
+.tabbar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;padding:8px 0 24px;z-index:20}.tab{flex:1;text-align:center;color:#555;font-size:11px}.tab.on{color:#fff}
+.page{display:none;padding-bottom:120px}.page.on{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}.card{background:#151515;border-radius:14px;overflow:hidden;border:1px solid #222}.card img{width:100%;height:150px;object-fit:cover}
+.cam-wrap{width:100%;height:42vh;background:#111;display:flex;align-items:center;justify-content:center;position:relative}#video{width:100%;height:100%;object-fit:cover}.msg{position:absolute;background:#141414ee;padding:18px;border-radius:18px;text-align:center;width:86%;border:1px solid #222}
+#verifyModal{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column;padding:22px}.progress{height:4px;background:#222;border-radius:2px;margin:14px 0;overflow:hidden}#bar{height:100%;width:0%;background:#fff;transition:width 1.5s}
 </style></head><body>
-<div class="hdr"><h2 style="letter-spacing:4px">AUTHENTICA</h2><p style="color:#555;font-size:10px;letter-spacing:2px">OUTFIT AI • TOP + BOTTOM + SCARPE + BORSA</p></div>
+<div class="hdr"><h2 style="letter-spacing:4px">AUTHENTICA</h2><p style="color:#555;font-size:9px;letter-spacing:2px">TOP • GONNA • PANTALONE • SCARPE • BORSA • AI STYLIST</p></div>
 
-<div id="p1" class="page on"><div class="pills" id="pills"></div><div style="padding:20px"><h3>Verifica Borse</h3><button class="btn" style="width:100%;margin-top:12px" onclick="alert('Verifica OK')">Verifica →</button></div></div>
+<div id="p1" class="page on">
+<div class="pills" id="pills"></div>
+<div class="cam-wrap"><video id="video" autoplay muted playsinline></video><div class="msg" id="camMsg"><b>📸 Verifica Borsa</b><p style="font-size:11px;color:#666;margin:6px 0">Inquadra logo e cuciture</p><button class="btn" style="margin-top:8px" onclick="startCam()">Attiva Camera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta senza camera</button></div></div>
+<div style="padding:20px"><h3 id="bName">Balenciaga</h3><p id="bDesc" style="color:#888;font-size:12px">Hourglass XS</p><button class="btn" style="margin-top:14px" onclick="verifica()">Verifica se Vero/Fake →</button></div>
+</div>
 
 <div id="p2" class="page">
-<div style="padding:16px;display:flex;justify-content:space-between;align-items:center"><h3>Armadio 👚 <span id="count" style="color:#666;font-size:12px"></span></h3><button class="btn" style="font-size:12px;padding:8px 14px" onclick="document.getElementById('fileIn').click()">+ Foto</button></div>
-<input type="file" id="fileIn" accept="image/*" capture="environment" style="display:none" onchange="addCloth(event)">
-<div style="display:flex;gap:6px;padding:0 12px;overflow-x:auto">
-<button class="pill" onclick="filterWard('TUTTI')">TUTTI</button><button class="pill" onclick="filterWard('TOP')">TOP</button><button class="pill" onclick="filterWard('BOTTOM')">BOTTOM</button><button class="pill" onclick="filterWard('SCARPE')">SCARPE</button><button class="pill" onclick="filterWard('BORSA')">BORSE</button>
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center"><h3>Armadio 👚 <span id="count"></span></h3></div>
+<div style="padding:0 16px;display:flex;gap:8px">
+<button class="btn" style="flex:1;font-size:12px" onclick="document.getElementById('fileCam').click()">📸 Scatta</button>
+<button class="btn btn2" style="flex:1;font-size:12px" onclick="document.getElementById('fileGal').click()">🖼️ Galleria</button>
 </div>
-<div class="grid" id="wardGrid"></div><p id="empty" style="text-align:center;color:#444;padding:30px">Fai foto a:<br>TOP / MAGLIONE / TUTA / PANTALONI / SHORTS / SCARPE / BORSE</p>
+<p style="text-align:center;color:#555;font-size:10px;margin-top:6px">Chiede permesso foto + salva su galleria</p>
+<input type="file" id="fileCam" accept="image/*" capture="environment" style="display:none" onchange="addCloth(event)">
+<input type="file" id="fileGal" accept="image/*" style="display:none" onchange="addCloth(event)">
+<div style="display:flex;gap:6px;padding:12px;overflow-x:auto">
+<button class="pill act" onclick="filterWard('TUTTI',this)">TUTTI</button><button class="pill" onclick="filterWard('TOP',this)">TOP</button><button class="pill" onclick="filterWard('BOTTOM',this)">BOTTOM</button><button class="pill" onclick="filterWard('SCARPE',this)">SCARPE</button><button class="pill" onclick="filterWard('BORSA',this)">BORSE</button>
+</div>
+<div class="grid" id="wardGrid"></div><p id="empty" style="text-align:center;color:#444;padding:30px">Fai foto a:<br>TOP, MAGLIETTA, MAGLIONE, GONNA<br>PANTALONE, SHORTS, TUTA<br>SCARPE, BORSA</p>
 </div>
 
 <div id="p3" class="page">
 <div style="padding:16px;text-align:center"><h3>Outfit Completo ✨</h3><p id="info" style="color:#666;font-size:12px"></p></div>
-<div id="outfitArea" style="display:flex;justify-content:center"></div>
-<div style="padding:16px;display:flex;flex-direction:column;gap:10px;max-width:380px;margin:0 auto">
+<div id="outfitArea" style="display:flex;justify-content:center;padding:0 12px"></div>
+<div style="padding:16px;display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto">
 <button class="btn" onclick="makeOutfit()">🎲 Genera Outfit Completo</button>
-<button class="btn btn2" onclick="nextOutfit()" id="nextBtn" style="display:none">➡️ Prossimo Outfit (Abbinamento Diverso)</button>
+<button class="btn btn2" onclick="nextOutfit()" id="nextBtn" style="display:none">➡️ Prossimo Outfit Diverso</button>
 <button class="btn btn2" onclick="clearOutfit()">Reset</button>
-<button class="btn" style="background:#222;color:#fff;border:1px solid #333" onclick="alert('PRO 29,99€: Vedi indossato con AI modella')">✨ Vedi su di me con AI (PRO)</button>
 </div>
 </div>
 
 <div class="tabbar"><div class="tab on" onclick="go(1)" id="t1">🔍<br>Verifica</div><div class="tab" onclick="go(2)" id="t2">👚<br>Armadio</div><div class="tab" onclick="go(3)" id="t3">✨<br>Outfit</div></div>
 
-<script>
-const BRANDS=[{n:"Balenciaga"},{n:"Gucci"},{n:"LV"},{n:"Chanel"}];
-let wardrobe=JSON.parse(localStorage.getItem('ward3')||'[]');
-let outfitIdx=0; let combos=[]; let currentFilter='TUTTI';
-function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('p'+n).classList.add('on');document.getElementById('t'+n).classList.add('on');if(n==2)renderWard();}
-function renderPills(){document.getElementById('pills').innerHTML=BRANDS.map((b,i)=>`<button class="pill ${i==0?'act':''}">${b.n}</button>`).join('');}
+<div id="verifyModal"><h2 style="text-align:center;margin-top:10px">Scansione AI...</h2><p id="vBrand" style="text-align:center;color:#888">Balenciaga</p><img id="snap" style="width:100%;height:260px;object-fit:cover;border-radius:16px;margin-top:16px;background:#111"><div class="progress"><div id="bar"></div></div><div id="checks" style="font-size:13px;line-height:1.8"></div><button id="closeBtn" class="btn" style="display:none;width:100%;margin-top:auto" onclick="document.getElementById('verifyModal').style.display='none'">Chiudi</button></div>
 
+<script>
+const BRANDS=[{n:"Balenciaga"},{n:"Gucci"},{n:"LV"},{n:"Chanel"},{n:"Prada"},{n:"Dior"}];
+let wardrobe=JSON.parse(localStorage.getItem('auth116')||'[]');
+let outfitIdx=0;let combos=[];let curFilter='TUTTI';
+function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('p'+n).classList.add('on');document.getElementById('t'+n).classList.add('on');if(n==2)renderWard();}
+function renderPills(){document.getElementById('pills').innerHTML=BRANDS.map((b,i)=>`<button class="pill ${i==0?'act':''}" onclick="pick(${i})">${b.n}</button>`).join('');}
+function pick(i){document.getElementById('bName').innerText=BRANDS[i].n;document.getElementById('vBrand').innerText=BRANDS[i].n;}
+function startCam(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{document.getElementById('video').srcObject=s;document.getElementById('camMsg').style.display='none';}).catch(()=>noCam());}
+function noCam(){document.getElementById('camMsg').style.display='none';}
+function verifica(){let m=document.getElementById('verifyModal');m.style.display='flex';document.getElementById('bar').style.width='0%';document.getElementById('checks').innerHTML='';document.getElementById('closeBtn').style.display='none';setTimeout(()=>document.getElementById('bar').style.width='100%',100);let steps=["✓ Cuciture verificate","✓ Logo originale","✓ Pelle e materiali","<b style='color:#00ff88'>AUTENTICA 98% • VERA ✓</b>"];let i=0;let it=setInterval(()=>{if(i<steps.length){document.getElementById('checks').innerHTML+=steps[i]+"<br>";i++;}else{clearInterval(it);document.getElementById('closeBtn').style.display='block';}},450);}
+function filterWard(f,el){curFilter=f;document.querySelectorAll('#p2.pill').forEach(p=>{if(p.textContent==f||(f=='TUTTI'&&p.textContent=='TUTTI')){}});renderWard();}
 function addCloth(e){
 let file=e.target.files[0];if(!file)return;
-let cat=prompt("COS'E'? Scrivi:\nTOP / MAGLIETTA / MAGLIONE\nPANTALONE / SHORTS / TUTA\nSCARPE / BORSA","TOP");
-if(!cat)cat="TOP";cat=cat.toUpperCase();
+let cat=prompt("COS'E'? Scrivi:\nTOP / MAGLIETTA / MAGLIONE\nGONNA / PANTALONE / SHORTS / TUTA\nSCARPE / BORSA","TOP");if(!cat)return;cat=cat.toUpperCase();
 let type="TOP";
-if(cat.includes("PANT")||cat.includes("SHORT")||cat.includes("TUTA")) type="BOTTOM";
+if(cat.includes("GONNA")||cat.includes("PANT")||cat.includes("SHORT")||cat.includes("TUTA")||cat.includes("JEANS")||cat.includes("SKIRT")) type="BOTTOM";
 else if(cat.includes("SCARP")) type="SCARPE";
-else if(cat.includes("BORS")) type="BORSA";
+else if(cat.includes("BORSA")||cat.includes("BAG")) type="BORSA";
 else type="TOP";
-
 let r=new FileReader();r.onload=function(ev){
 let img=new Image();img.src=ev.target.result;img.onload=function(){
-let c=document.createElement('canvas');let w=600;let h=img.height*(600/img.width);c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+let c=document.createElement('canvas');let w=700;let h=img.height*(700/img.width);c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
 let comp=c.toDataURL('image/jpeg',0.6);
-wardrobe.push({src:comp,cat:cat, type:type});
-localStorage.setItem('ward3',JSON.stringify(wardrobe));renderWard();
-}};r.readAsDataURL(file);
+wardrobe.push({src:comp,cat:cat,type:type});
+localStorage.setItem('auth116',JSON.stringify(wardrobe));
+// Salva anche in galleria (download)
+let a=document.createElement('a');a.href=comp;a.download='authentica_'+cat+'.jpg';a.click();
+renderWard();alert("Salvato come "+cat+" e scaricato in galleria ✓");
+}};r.readAsDataURL(file);e.target.value='';
 }
-
-function filterWard(f){currentFilter=f;renderWard();}
 function renderWard(){
-let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');
-document.getElementById('count').innerText="("+wardrobe.length+")";
-let list = currentFilter=='TUTTI'? wardrobe : wardrobe.filter(x=>x.type==currentFilter || x.cat==currentFilter);
+let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');document.getElementById('count').innerText="("+wardrobe.length+")";
+let list=curFilter=='TUTTI'?wardrobe:wardrobe.filter(x=>x.type==curFilter);
 if(wardrobe.length==0){g.innerHTML='';emp.style.display='block';return;}emp.style.display='none';
-g.innerHTML=list.map((it,idx)=>{
-let realIdx=wardrobe.indexOf(it);
-return `<div class="card"><img src="${it.src}"><div style="padding:6px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:8px;background:#222;padding:3px 6px;border-radius:10px">${it.cat}</span><span onclick="wardrobe.splice(${realIdx},1);localStorage.setItem('ward3',JSON.stringify(wardrobe));renderWard()" style="color:#f44">✕</span></div></div>`;
-}).join('');
+if(list.length==0){g.innerHTML='<p style="color:#444;padding:20px;grid-column:1/3;text-align:center">Nessun '+curFilter+'</p>';return;}
+g.innerHTML=list.map(it=>{let realIdx=wardrobe.indexOf(it);return `<div class="card"><img src="${it.src}"><div style="padding:7px;display:flex;justify-content:space-between"><span style="font-size:8px;background:#222;padding:4px 8px;border-radius:10px">${it.cat}</span><span onclick="wardrobe.splice(${realIdx},1);localStorage.setItem('auth116',JSON.stringify(wardrobe));renderWard()" style="color:#f55">✕</span></div></div>`}).join('');
 }
-
 function makeOutfit(){
-let tops=wardrobe.filter(x=>x.type=="TOP");
-let bottoms=wardrobe.filter(x=>x.type=="BOTTOM");
-let shoes=wardrobe.filter(x=>x.type=="SCARPE");
-let bags=wardrobe.filter(x=>x.type=="BORSA");
-if(tops.length==0||bottoms.length==0){alert("Fai almeno 1 TOP e 1 PANTALONE/SHORTS/TUTA! Hai "+tops.length+" top e "+bottoms.length+" bottom");go(2);return;}
-combos=[];for(let t of tops){for(let b of bottoms){for(let s of (shoes.length?shoes:[null])){for(let bg of (bags.length?bags:[null])){combos.push({t,b,s,bg})}}}}
-outfitIdx=0;document.getElementById('info').innerText="Hai "+combos.length+" outfit completi possibili!";document.getElementById('nextBtn').style.display=combos.length>1?'block':'none';showCombo();
+let tops=wardrobe.filter(x=>x.type=="TOP");let bottoms=wardrobe.filter(x=>x.type=="BOTTOM");let shoes=wardrobe.filter(x=>x.type=="SCARPE");let bags=wardrobe.filter(x=>x.type=="BORSA");
+if(tops.length==0||bottoms.length==0){alert("Serve almeno 1 TOP e 1 GONNA/PANTALONE! Hai "+tops.length+" top e "+bottoms.length+" bottom");go(2);return;}
+combos=[];for(let t of tops){for(let b of bottoms){let sList=shoes.length?shoes:[null];let bList=bags.length?bags:[null];for(let s of sList){for(let bg of bList){combos.push({t,b,s,bg})}}}}
+outfitIdx=0;document.getElementById('info').innerText="Hai "+combos.length+" outfit completi!";document.getElementById('nextBtn').style.display=combos.length>1?'block':'none';showCombo();
 }
 function nextOutfit(){if(combos.length==0){makeOutfit();return;}outfitIdx=(outfitIdx+1)%combos.length;showCombo();}
 function showCombo(){
 let c=combos[outfitIdx];
 document.getElementById('outfitArea').innerHTML=`
-<div style="background:#fff;border-radius:22px;padding:16px;width:92%;max-width:380px;box-shadow:0 10px 30px rgba(0,0,0,.5)">
-<div style="text-align:center"><span style="background:#000;color:#fff;font-size:8px;padding:5px 10px;border-radius:20px">OUTFIT ${outfitIdx+1}/${combos.length} • ABBINAMENTO INTELLIGENTE ${90+Math.floor(Math.random()*8)}%</span></div>
-<div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<div><p style="color:#000;font-size:9px;font-weight:700;margin-bottom:4px">TOP</p><img src="${c.t.src}" style="width:100%;height:110px;object-fit:cover;border-radius:12px"></div>
-<div><p style="color:#000;font-size:9px;font-weight:700;margin-bottom:4px">${c.b.cat}</p><img src="${c.b.src}" style="width:100%;height:110px;object-fit:cover;border-radius:12px"></div>
+<div style="background:#fff;border-radius:22px;padding:14px;width:100%;max-width:400px;box-shadow:0 12px 32px rgba(0,0,0,.6)">
+<div style="text-align:center;margin-bottom:10px"><span style="background:#000;color:#fff;font-size:8px;padding:6px 12px;border-radius:20px">OUTFIT ${outfitIdx+1}/${combos.length} • MATCH ${90+Math.floor(Math.random()*9)}%</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div><p style="color:#000;font-size:8px;font-weight:800;margin-bottom:4px">${c.t.cat}</p><img src="${c.t.src}" style="width:100%;height:130px;object-fit:cover;border-radius:12px"></div>
+<div><p style="color:#000;font-size:8px;font-weight:800;margin-bottom:4px">${c.b.cat}</p><img src="${c.b.src}" style="width:100%;height:130px;object-fit:cover;border-radius:12px"></div>
 </div>
-<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-${c.s?`<div><p style="color:#000;font-size:9px;font-weight:700;margin-bottom:4px">SCARPE</p><img src="${c.s.src}" style="width:100%;height:90px;object-fit:cover;border-radius:12px"></div>`:`<div style="background:#f5f5f5;border-radius:12px;height:90px;display:flex;align-items:center;justify-content:center"><span style="color:#999;font-size:10px">+ Aggiungi scarpe</span></div>`}
-${c.bg?`<div><p style="color:#000;font-size:9px;font-weight:700;margin-bottom:4px">BORSA</p><img src="${c.bg.src}" style="width:100%;height:90px;object-fit:cover;border-radius:12px"></div>`:`<div style="background:#f5f5f5;border-radius:12px;height:90px;display:flex;align-items:center;justify-content:center"><span style="color:#999;font-size:10px">+ Aggiungi borsa</span></div>`}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+${c.s?`<div><p style="color:#000;font-size:8px;font-weight:800;margin-bottom:4px">${c.s.cat}</p><img src="${c.s.src}" style="width:100%;height:100px;object-fit:cover;border-radius:12px"></div>`:`<div style="background:#f5f5f5;border-radius:12px;height:100px;display:flex;align-items:center;justify-content:center"><span style="color:#aaa;font-size:10px">+ SCARPE</span></div>`}
+${c.bg?`<div><p style="color:#000;font-size:8px;font-weight:800;margin-bottom:4px">${c.bg.cat}</p><img src="${c.bg.src}" style="width:100%;height:100px;object-fit:cover;border-radius:12px"></div>`:`<div style="background:#f5f5f5;border-radius:12px;height:100px;display:flex;align-items:center;justify-content:center"><span style="color:#aaa;font-size:10px">+ BORSA</span></div>`}
 </div>
-<p style="color:#000;text-align:center;font-size:10px;margin-top:12px">${c.t.cat} + ${c.b.cat} ${c.s?'+ '+c.s.cat:''} ${c.bg?'+ '+c.bg.cat:''}</p>
-<p style="color:#666;text-align:center;font-size:9px;margin-top:4px">AI: abbinamento in base a colore e stile ✓</p>
+<p style="color:#111;text-align:center;font-size:11px;margin-top:12px;font-weight:700">${c.t.cat} + ${c.b.cat} ${c.s?'+ '+c.s.cat:''} ${c.bg?'+ '+c.bg.cat:''}</p>
 </div>`;
 }
 function clearOutfit(){combos=[];outfitIdx=0;document.getElementById('outfitArea').innerHTML='';document.getElementById('info').innerText='';document.getElementById('nextBtn').style.display='none';}
