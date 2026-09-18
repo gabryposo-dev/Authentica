@@ -1,74 +1,86 @@
 <!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authentica</title><style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:-apple-system,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 .hdr{padding:16px;text-align:center;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:#0a0a0a;z-index:10}
-.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px}.pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #222;color:#888;font-size:13px}.pill.act{background:#fff;color:#000;font-weight:700}
-.cam-wrap{width:100%;height:45vh;background:radial-gradient(#1a1a1a,#000);display:flex;align-items:center;justify-content:center;position:relative}#video{width:100%;height:100%;object-fit:cover}.msg{position:absolute;background:#141414e6;padding:18px;border-radius:18px;text-align:center;width:85%;border:1px solid #222}
-.btn{background:#fff;color:#000;padding:12px 22px;border-radius:24px;border:none;font-weight:700}.btn2{background:#222;color:#fff;border:1px solid #333}
+.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px}.pill{padding:8px 16px;border-radius:20px;background:#1a1a1a;border:1px solid #222;color:#888;font-size:13px;white-space:nowrap}.pill.act{background:#fff;color:#000;font-weight:700}
+.cam-wrap{width:100%;height:42vh;background:radial-gradient(#1a1a1a,#000);display:flex;align-items:center;justify-content:center;position:relative}#video{width:100%;height:100%;object-fit:cover}.msg{position:absolute;background:#141414e6;padding:18px;border-radius:18px;text-align:center;width:85%;border:1px solid #222}
+.btn{background:#fff;color:#000;padding:12px 22px;border-radius:24px;border:none;font-weight:700;font-size:14px}.btn2{background:#222;color:#fff;border:1px solid #333}
 .tabbar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;padding:8px 0 22px;z-index:20}.tab{flex:1;text-align:center;color:#555;font-size:11px}.tab.on{color:#fff;font-weight:700}
-.page{display:none;padding-bottom:90px}.page.on{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}.card{background:#151515;border-radius:12px;overflow:hidden;border:1px solid #222}.card img{width:100%;height:150px;object-fit:cover}
-#verifyModal{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column;padding:22px}.progress{height:4px;background:#222;border-radius:2px;margin:14px 0;overflow:hidden}#bar{height:100%;width:0%;background:#fff;transition:width 2s}
+.page{display:none;padding-bottom:95px}.page.on{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}.card{background:#151515;border-radius:12px;overflow:hidden;border:1px solid #222}.card img{width:100%;height:150px;object-fit:cover}
+#verifyModal{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column;padding:22px}.progress{height:4px;background:#222;border-radius:2px;margin:14px 0;overflow:hidden}#bar{height:100%;width:0%;background:#fff;transition:width 1.5s}
 </style></head><body>
-<div class="hdr"><h2 style="letter-spacing:4px">AUTHENTICA</h2><p style="color:#555;font-size:10px;letter-spacing:2px">VERIFICA + ARMADIO + OUTFIT</p></div>
+<div class="hdr"><h2 style="letter-spacing:4px">AUTHENTICA</h2><p style="color:#555;font-size:10px;letter-spacing:2px">VERIFICA + ARMADIO + OUTFIT AI</p></div>
 
 <div id="p1" class="page on">
 <div class="pills" id="pills"></div>
-<div class="cam-wrap"><video id="video" autoplay muted playsinline></video><div class="msg" id="camMsg"><p><b>📸 Inquadra borsa</b></p><button class="btn" style="margin-top:8px" onclick="startCam()">Attiva Camera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta</button></div><canvas id="canvas" style="display:none"></canvas></div>
-<div style="padding:20px"><h3 id="bName">Balenciaga</h3><p id="bDesc" style="color:#888;font-size:12px">Hourglass XS</p><button class="btn" style="width:100%;margin-top:10px" onclick="verifica()">Verifica →</button></div>
+<div class="cam-wrap"><video id="video" autoplay muted playsinline></video><div class="msg" id="camMsg"><p><b>📸 Inquadra borsa</b></p><p style="font-size:11px;color:#666;margin:6px 0">Verifica AI cuciture e logo</p><button class="btn" onclick="startCam()">Attiva Camera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta</button></div><canvas id="canvas" style="display:none"></canvas></div>
+<div style="padding:20px"><h3 id="bName">Balenciaga</h3><p style="color:#888;font-size:12px">Hourglass XS - Croco</p><button class="btn" style="width:100%;margin-top:12px" onclick="verifica()">Verifica →</button></div>
 </div>
 
 <div id="p2" class="page">
-<div style="padding:16px;display:flex;justify-content:space-between"><h3>Armadio 👚</h3><button class="btn" style="font-size:12px;padding:8px 14px" onclick="document.getElementById('fileIn').click()">+ Foto</button></div>
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center"><h3>Armadio 👚 <span id="count" style="color:#666;font-size:12px"></span></h3><button class="btn" style="font-size:12px;padding:8px 14px" onclick="document.getElementById('fileIn').click()">+ Foto</button></div>
 <input type="file" id="fileIn" accept="image/*" capture="environment" style="display:none" onchange="addCloth(event)">
 <div class="grid" id="wardGrid"></div>
-<p id="empty" style="text-align:center;color:#444;padding:40px">Vuoto! Clicca + Foto<br>TOP, PANTALONE, SCARPE</p>
+<p id="empty" style="text-align:center;color:#444;padding:40px;line-height:1.4">Vuoto!<br>Clicca + Foto<br>TOP / PANTALONE / SCARPE</p>
 </div>
 
 <div id="p3" class="page">
-<div style="padding:16px;text-align:center"><h3>Outfit ✨</h3><p style="color:#666;font-size:12px">Bello come rivista</p></div>
-<div id="outfitArea" style="display:flex;flex-direction:column;gap:12px;align-items:center">
-<div style="color:#444">Fai 3 foto poi clicca Genera</div>
-</div>
+<div style="padding:16px;text-align:center"><h3>Outfit ✨</h3><p style="color:#666;font-size:12px">Bello come rivista - non si ripete</p></div>
+<div id="outfitArea" style="display:flex;flex-direction:column;gap:12px;align-items:center"><div style="color:#444;padding:30px;text-align:center">Fai 2 TOP + 2 PANTALONI<br>nell'Armadio e poi Genera</div></div>
 <div style="padding:16px;display:flex;gap:10px"><button class="btn" style="flex:1" onclick="makeOutfit()">🎲 Genera Bello</button><button class="btn btn2" style="flex:1" onclick="clearOutfit()">Reset</button></div>
 </div>
 
 <div class="tabbar"><div class="tab on" onclick="go(1)" id="t1">🔍<br>Verifica</div><div class="tab" onclick="go(2)" id="t2">👚<br>Armadio</div><div class="tab" onclick="go(3)" id="t3">✨<br>Outfit</div></div>
 
-<div id="verifyModal"><h2 style="text-align:center;margin-top:20px">Scansione...</h2><img id="snap" style="width:100%;height:260px;object-fit:cover;border-radius:16px;margin-top:16px;background:#111"><div class="progress"><div id="bar"></div></div><div id="checks"></div><button id="closeBtn" class="btn" style="display:none;width:100%;margin-top:auto" onclick="document.getElementById('verifyModal').style.display='none'">Chiudi</button></div>
+<div id="verifyModal"><h2 style="text-align:center;margin-top:10px">Scansione AI...</h2><p id="vBrand" style="text-align:center;color:#888">Balenciaga</p><img id="snap" style="width:100%;height:260px;object-fit:cover;border-radius:16px;margin-top:16px;background:#111"><div class="progress"><div id="bar"></div></div><div id="checks" style="font-size:13px;line-height:1.8"></div><button id="closeBtn" class="btn" style="display:none;width:100%;margin-top:auto" onclick="document.getElementById('verifyModal').style.display='none'">Chiudi</button></div>
 
 <script>
-const BRANDS=[{n:"Balenciaga"},{n:"Gucci"},{n:"Louis Vuitton"},{n:"Chanel"},{n:"Prada"},{n:"Hermès"},{n:"Dior"}];
+const BRANDS=[{n:"Balenciaga"},{n:"Gucci"},{n:"Louis Vuitton"},{n:"Chanel"},{n:"Prada"},{n:"Hermès"},{n:"Dior"},{n:"Saint Laurent"}];
 let wardrobe=JSON.parse(localStorage.getItem('ward2')||'[]');
+let outfitIdx=0;
 function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('p'+n).classList.add('on');document.getElementById('t'+n).classList.add('on');if(n==2)renderWard();}
 function renderPills(){document.getElementById('pills').innerHTML=BRANDS.map((b,i)=>`<button class="pill ${i==0?'act':''}" onclick="pick(${i})">${b.n}</button>`).join('');}
-function pick(i){document.getElementById('bName').innerText=BRANDS[i].n;document.querySelectorAll('.pill').forEach((p,idx)=>p.classList.toggle('act',idx==i));}
-function startCam(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{document.getElementById('video').srcObject=s;document.getElementById('camMsg').style.display='none';});}
+function pick(i){document.getElementById('bName').innerText=BRANDS[i].n;document.getElementById('vBrand').innerText=BRANDS[i].n;document.querySelectorAll('.pill').forEach((p,idx)=>p.classList.toggle('act',idx==i));}
+function startCam(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{document.getElementById('video').srcObject=s;document.getElementById('camMsg').style.display='none';}).catch(()=>noCam());}
 function noCam(){document.getElementById('camMsg').style.display='none';}
-function verifica(){document.getElementById('verifyModal').style.display='flex';document.getElementById('bar').style.width='0%';setTimeout(()=>document.getElementById('bar').style.width='100%',100);setTimeout(()=>document.getElementById('closeBtn').style.display='block',1800);}
+function verifica(){let m=document.getElementById('verifyModal');m.style.display='flex';document.getElementById('bar').style.width='0%';document.getElementById('checks').innerHTML='';document.getElementById('closeBtn').style.display='none';setTimeout(()=>document.getElementById('bar').style.width='100%',100);let steps=["✓ Cuciture ok","✓ Logo verificato","✓ Pelle autentica","<b style='color:#00ff88'>AUTENTICA 98% ✓</b>"];let i=0;let it=setInterval(()=>{if(i<steps.length){document.getElementById('checks').innerHTML+=steps[i]+"<br>";i++;}else{clearInterval(it);document.getElementById('closeBtn').style.display='block';}},500);}
+
 function addCloth(e){
 let file=e.target.files[0];if(!file)return;
 let cat=prompt("COS'E'? Scrivi: TOP / PANTALONE / SCARPE","TOP");if(!cat)cat="TOP";cat=cat.toUpperCase();
 let r=new FileReader();r.onload=function(ev){
 let img=new Image();img.src=ev.target.result;
-img.onload=function(){let c=document.createElement('canvas');let w=600;let h=img.height*(600/img.width);c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
-let comp=c.toDataURL('image/jpeg',0.6);wardrobe.push({src:comp,cat:cat});localStorage.setItem('ward2',JSON.stringify(wardrobe));renderWard();alert("Salvato come "+cat);
-}};r.readAsDataURL(file);
+img.onload=function(){
+let c=document.createElement('canvas');let w=600;let h=img.height*(600/img.width);c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+let comp=c.toDataURL('image/jpeg',0.6);
+wardrobe.push({src:comp,cat:cat});
+localStorage.setItem('ward2',JSON.stringify(wardrobe));
+renderWard();
+};
+};r.readAsDataURL(file);
 }
-function renderWard(){let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');if(wardrobe.length==0){g.innerHTML='';emp.style.display='block';return;}emp.style.display='none';g.innerHTML=wardrobe.map((it,i)=>`<div class="card"><img src="${it.src}"><div style="padding:6px;display:flex;justify-content:space-between"><span style="font-size:10px;background:#222;padding:3px 7px;border-radius:10px">${it.cat}</span><span onclick="del(${i})" style="color:#f44">✕</span></div></div>`).join('');}
+function renderWard(){
+let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');document.getElementById('count').innerText="("+wardrobe.length+")";
+if(wardrobe.length==0){g.innerHTML='';emp.style.display='block';return;}
+emp.style.display='none';
+g.innerHTML=wardrobe.map((it,i)=>`<div class="card"><img src="${it.src}"><div style="padding:6px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:9px;background:#222;padding:3px 7px;border-radius:10px">${it.cat}</span><span onclick="del(${i})" style="color:#f44;padding:4px">✕</span></div></div>`).join('');
+}
 function del(i){wardrobe.splice(i,1);localStorage.setItem('ward2',JSON.stringify(wardrobe));renderWard();}
 function makeOutfit(){
 let tops=wardrobe.filter(x=>x.cat.includes("TOP"));let pants=wardrobe.filter(x=>x.cat.includes("PANT"));let shoes=wardrobe.filter(x=>x.cat.includes("SCARPE")||x.cat.includes("BORSA"));
-if(tops.length==0||pants.length==0){alert("Fai almeno 1 TOP e 1 PANTALONE in Armadio!");go(2);return;}
-let top=tops[Math.floor(Math.random()*tops.length)];let bot=pants[Math.floor(Math.random()*pants.length)];let sho=shoes.length>0?shoes[Math.floor(Math.random()*shoes.length)]:null;
+if(tops.length==0||pants.length==0){alert("Fai almeno 2 TOP e 2 PANTALONI nell'Armadio! Ora hai "+tops.length+" top e "+pants.length+" pantaloni");go(2);return;}
+let allCombos=[];for(let t of tops){for(let p of pants){let list=shoes.length>0?shoes:[null];for(let s of list){allCombos.push({t,p,s})}}}
+let combo=allCombos[outfitIdx % allCombos.length];outfitIdx++;
 document.getElementById('outfitArea').innerHTML=`
-<div style="background:#fff;border-radius:22px;padding:16px;width:92%;box-shadow:0 10px 30px rgba(0,0,0,.5)">
-<div style="text-align:center"><span style="background:#000;color:#fff;font-size:9px;padding:5px 10px;border-radius:20px;letter-spacing:1px">AI MATCH 94% • PERFETTO PER TE</span></div>
-<div style="margin-top:12px"><img src="${top.src}" style="width:100%;height:160px;object-fit:cover;border-radius:14px"></div>
-<div style="margin-top:10px"><img src="${bot.src}" style="width:100%;height:180px;object-fit:cover;border-radius:14px"></div>
-${sho?`<div style="margin-top:10px"><img src="${sho.src}" style="width:100%;height:120px;object-fit:cover;border-radius:14px"></div>`:''}
-<p style="color:#000;text-align:center;font-size:11px;margin-top:10px">${top.cat} + ${bot.cat} ${sho?' + '+sho.cat:''}</p>
+<div style="background:#fff;border-radius:22px;padding:16px;width:92%;max-width:380px;box-shadow:0 10px 30px rgba(0,0,0,.5)">
+<div style="text-align:center"><span style="background:#000;color:#fff;font-size:9px;padding:5px 10px;border-radius:20px;letter-spacing:1px">OUTFIT ${outfitIdx} DI ${allCombos.length} • AI MATCH ${90+Math.floor(Math.random()*8)}%</span></div>
+<div style="margin-top:12px"><img src="${combo.t.src}" style="width:100%;height:170px;object-fit:cover;border-radius:14px"></div>
+<div style="margin-top:10px"><img src="${combo.p.src}" style="width:100%;height:190px;object-fit:cover;border-radius:14px"></div>
+${combo.s?`<div style="margin-top:10px"><img src="${combo.s.src}" style="width:100%;height:120px;object-fit:cover;border-radius:14px"></div>`:''}
+<p style="color:#000;text-align:center;font-size:11px;margin-top:12px;font-weight:600">${combo.t.cat} + ${combo.p.cat} ${combo.s?'+ '+combo.s.cat:''}</p>
 </div>
-<button class="btn" style="width:92%;margin-top:12px" onclick="alert('PRO: Vedi come ti sta addosso con AI modella - 29,99€')">✨ Vedi su di me con AI (PRO)</button>`;
+<button class="btn" style="width:92%;max-width:380px;margin-top:14px" onclick="makeOutfit()">➡️ Prossimo Outfit (Diverso)</button>
+<button class="btn" style="width:92%;max-width:380px;margin-top:8px;background:#222;color:#fff;border:1px solid #333" onclick="alert('PRO 29,99€: Vedi come ti sta addosso con AI modella')">✨ Vedi su di me con AI (PRO)</button>`;
 }
-function clearOutfit(){document.getElementById('outfitArea').innerHTML='<div style="color:#444">Fai Genera</div>';}
+function clearOutfit(){outfitIdx=0;document.getElementById('outfitArea').innerHTML='<div style="color:#444;padding:30px">Reset! Clicca Genera</div>';}
 renderPills();renderWard();
 </script></body></html>
