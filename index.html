@@ -1,60 +1,84 @@
-<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Authentica</title><style>
-*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a0a;color:#fff;font-family:-apple-system,sans-serif}
-.hdr{padding:16px;text-align:center;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:#0a0a0a;z-index:10}
-.pills{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;scrollbar-width:none}.pill{padding:9px 18px;border-radius:20px;background:#1a1a1a;border:1px solid #222;color:#888;font-size:13px;white-space:nowrap;transition:all.2s}.pill.act{background:#fff;color:#000;font-weight:800;border-color:#fff;transform:scale(1.05)}
-.btn{background:#fff;color:#000;padding:14px 22px;border-radius:24px;border:none;font-weight:700;font-size:14px;width:100%}.btn2{background:#1a1a1a;color:#fff;border:1px solid #333}
-.tabbar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #222;display:flex;padding:8px 0 24px;z-index:20}.tab{flex:1;text-align:center;color:#555;font-size:11px}.tab.on{color:#fff}
-.page{display:none;padding-bottom:120px}.page.on{display:block}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}.card{background:#151515;border-radius:14px;overflow:hidden;border:1px solid #222}.card img{width:100%;height:150px;object-fit:cover}
-.cam-wrap{width:100%;height:42vh;background:#0e0e0e;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}#video{width:100%;height:100%;object-fit:cover}.msg{position:absolute;background:#141414f0;padding:18px;border-radius:18px;text-align:center;width:86%;border:1px solid #222}
-.bagShow{margin:12px;border-radius:20px;overflow:hidden;background:#151515;border:1px solid #222}
-.bagShow img{width:100%;height:280px;object-fit:cover;display:block}
-#verifyModal{position:fixed;inset:0;background:#000;z-index:100;display:none;flex-direction:column;padding:22px}.progress{height:4px;background:#222;border-radius:2px;margin:14px 0;overflow:hidden}#bar{height:100%;width:0%;background:#fff;transition:width 1.5s}
-</style></head><body>
-<div class="hdr"><h2 style="letter-spacing:4px">AUTHENTICA</h2><p style="color:#555;font-size:9px;letter-spacing:2px">VERIFICA + ARMADIO + OUTFIT AI</p></div>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentica Luxury</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Helvetica Neue',sans-serif}
+body{background:#0a0a0a;color:white;min-height:100vh;transition:all 0.5s ease}
+body.hermes-mode{background:white;color:black}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+h1{text-align:center;margin:30px 0;letter-spacing:4px;font-weight:300}
+.brands{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:30px}
+.brand-btn{padding:12px 22px;border:1px solid #333;background:transparent;color:white;cursor:pointer;letter-spacing:1px;transition:0.3s;text-transform:uppercase;font-size:13px}
+body.hermes-mode .brand-btn{color:black;border-color:#ccc}
+.brand-btn:hover,.brand-btn.active{background:white;color:black}
+body.hermes-mode .brand-btn:hover,body.hermes-mode .brand-btn.active{background:black;color:white}
+body.hermes-mode .brand-btn[data-brand="Hermès"]{background:black;color:white;border-color:black}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{background:#111;border:1px solid #222;overflow:hidden;transition:0.3s;display:none}
+body.hermes-mode .card{background:#f9f9f9;border-color:#eee}
+.card.show{display:block}
+.card img{width:100%;height:380px;object-fit:cover}
+.card-info{padding:15px}
+.card-info h3{font-weight:400;letter-spacing:1px;margin-bottom:5px}
+.card-info p{opacity:0.6;font-size:13px}
+.armadio{margin-top:50px;border-top:1px solid #222;padding-top:30px}
+body.hermes-mode .armadio{border-color:#eee}
+.armadio h2{font-weight:300;letter-spacing:3px;margin-bottom:20px;text-align:center}
+.outfit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+.outfit-item{background:#111;padding:10px;text-align:center;border:1px solid #222}
+body.hermes-mode .outfit-item{background:#fff;border-color:#eee}
+</style>
+</head>
+<body id="body">
+<div class="container">
+<h1>AUTHENTICA</h1>
 
-<div id="p1" class="page on">
-<div class="pills" id="pills"></div>
-<div class="cam-wrap"><video id="video" autoplay muted playsinline></video><div class="msg" id="camMsg"><b>📸 Verifica Borsa</b><p style="font-size:11px;color:#666;margin:6px 0">Gucci, Balenciaga, LV - Vero/Fake AI</p><button class="btn" onclick="startCam()">Attiva Camera</button><br><button class="btn btn2" style="margin-top:8px;font-size:11px" onclick="noCam()">Salta</button></div></div>
-<div style="padding:16px">
-<div class="bagShow"><img id="bagImg" src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600" alt="Borsa"><div style="padding:12px;display:flex;justify-content:space-between;align-items:center"><div><h3 id="bName">Gucci</h3><p id="bDesc" style="color:#888;font-size:12px">Dionysus Mini - Nera</p></div><span style="background:#fff;color:#000;font-size:10px;padding:6px 10px;border-radius:20px;font-weight:700">98% VERA</span></div></div>
-<button class="btn" style="margin-top:6px" onclick="verifica()">Verifica questa borsa →</button>
+<div class="brands">
+<button class="brand-btn active" data-brand="all" onclick="filterBrand('all',this)">Tutti</button>
+<button class="brand-btn" data-brand="Gucci" onclick="filterBrand('Gucci',this)">Gucci</button>
+<button class="brand-btn" data-brand="Balenciaga" onclick="filterBrand('Balenciaga',this)">Balenciaga</button>
+<button class="brand-btn" data-brand="Prada" onclick="filterBrand('Prada',this)">Prada</button>
+<button class="brand-btn" data-brand="LV" onclick="filterBrand('LV',this)">Louis Vuitton</button>
+<button class="brand-btn" data-brand="YSL" onclick="filterBrand('YSL',this)">Saint Laurent</button>
+<button class="brand-btn" data-brand="Hermès" onclick="filterBrand('Hermès',this)">Hermès</button>
+<button class="brand-btn" data-brand="Chanel" onclick="filterBrand('Chanel',this)">Chanel</button>
+</div>
+
+<div class="gallery">
+<div class="card show" data-brand="Gucci"><img src="Gucci.JPG"><div class="card-info"><h3>GUCCI</h3><p>Collezione Authentica</p></div></div>
+<div class="card show" data-brand="Balenciaga"><img src="Balenciaga.JPG"><div class="card-info"><h3>BALENCIAGA</h3><p>Collezione Authentica</p></div></div>
+<div class="card show" data-brand="Prada"><img src="Prada.JPG"><div class="card-info"><h3>PRADA</h3><p>Collezione Authentica</p></div></div>
+<div class="card show" data-brand="LV"><img src="Louis_Viton.JPG"><div class="card-info"><h3>LOUIS VUITTON</h3><p>Collezione Authentica</p></div></div>
+<div class="card show" data-brand="YSL"><img src="Saint Laurent.JPG"><div class="card-info"><h3>SAINT LAURENT</h3><p>Collezione Authentica</p></div></div>
+<div class="card show" data-brand="Hermès"><img src="hermes.jpg"><div class="card-info"><h3>HERMÈS</h3><p>Edizione Speciale - White Mode</p></div></div>
+<div class="card show" data-brand="Chanel"><img src="Chanel.JPG"><div class="card-info"><h3>CHANEL</h3><p>Collezione Authentica</p></div></div>
+</div>
+
+<div class="armadio">
+<h2>IL MIO ARMADIO + OUTFIT</h2>
+<div class="outfit-grid">
+<div class="outfit-item">👗 Outfit 1 - Gucci + Prada</div>
+<div class="outfit-item">👜 Outfit 2 - Chanel + YSL</div>
+<div class="outfit-item">👠 Outfit 3 - Balenciaga + LV</div>
+<div class="outfit-item">✨ Outfit 4 - Hermès Total White</div>
 </div>
 </div>
 
-<div id="p2" class="page">
-<div style="padding:16px;display:flex;justify-content:space-between"><h3>Armadio 👚 <span id="count"></span></h3></div>
-<div style="padding:0 16px;display:flex;gap:8px"><button class="btn" style="flex:1;font-size:12px" onclick="document.getElementById('fileCam').click()">📸 Scatta</button><button class="btn btn2" style="flex:1;font-size:12px" onclick="document.getElementById('fileGal').click()">🖼️ Galleria</button></div>
-<input type="file" id="fileCam" accept="image/*" capture="environment" style="display:none" onchange="addCloth(event)"><input type="file" id="fileGal" accept="image/*" style="display:none" onchange="addCloth(event)">
-<div class="grid" id="wardGrid"></div><p id="empty" style="text-align:center;color:#444;padding:30px">TOP, GONNA, PANTALONE, SHORTS, TUTA,<br>SCARPE, BORSA</p>
 </div>
-
-<div id="p3" class="page"><div style="padding:16px;text-align:center"><h3>Outfit ✨</h3><p id="info" style="color:#666;font-size:12px"></p></div><div id="outfitArea" style="display:flex;justify-content:center;padding:0 12px"></div><div style="padding:16px;display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto"><button class="btn" onclick="makeOutfit()">🎲 Genera Outfit</button><button class="btn btn2" onclick="nextOutfit()" id="nextBtn" style="display:none">➡️ Prossimo Diverso</button></div></div>
-
-<div class="tabbar"><div class="tab on" onclick="go(1)" id="t1">🔍<br>Verifica</div><div class="tab" onclick="go(2)" id="t2">👚<br>Armadio</div><div class="tab" onclick="go(3)" id="t3">✨<br>Outfit</div></div>
-
-<div id="verifyModal"><h2 style="text-align:center">Scansione AI...</h2><p id="vBrand" style="text-align:center;color:#888">Gucci</p><div class="progress"><div id="bar"></div></div><div id="checks"></div><button id="closeBtn" class="btn" style="display:none;margin-top:auto" onclick="document.getElementById('verifyModal').style.display='none'">Chiudi</button></div>
 
 <script>
-const BRANDS=[
-{n:"Gucci",desc:"Dionysus Mini - Nera",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600"},
-{n:"Balenciaga",desc:"Hourglass XS - Croco",img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600"},
-{n:"Louis Vuitton",desc:"Neverfull - Monogram",img:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600"},
-{n:"Chanel",desc:"Classic Flap",img:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600"},
-{n:"Prada",desc:"Cleo - Nera",img:"https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=600"},
-{n:"Dior",desc:"Saddle Bag",img:"https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600"}
-];
-let sel=0;
-let wardrobe=JSON.parse(localStorage.getItem('auth118')||'[]');let outfitIdx=0;let combos=[];
-function go(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('p'+n).classList.add('on');document.getElementById('t'+n).classList.add('on');if(n==2)renderWard();}
-function renderPills(){document.getElementById('pills').innerHTML=BRANDS.map((b,i)=>`<button class="pill ${i==sel?'act':''}" onclick="pick(${i})">${b.n}</button>`).join('');}
-function pick(i){sel=i;document.getElementById('bName').innerText=BRANDS[i].n;document.getElementById('bDesc').innerText=BRANDS[i].desc;document.getElementById('bagImg').src=BRANDS[i].img;document.getElementById('vBrand').innerText=BRANDS[i].n;renderPills();}
-function startCam(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}).then(s=>{document.getElementById('video').srcObject=s;document.getElementById('camMsg').style.display='none';}).catch(()=>noCam());}
-function noCam(){document.getElementById('camMsg').style.display='none';}
-function verifica(){let m=document.getElementById('verifyModal');m.style.display='flex';document.getElementById('bar').style.width='0%';document.getElementById('checks').innerHTML='';document.getElementById('closeBtn').style.display='none';setTimeout(()=>document.getElementById('bar').style.width='100%',100);let steps=["✓ Cuciture ok","✓ Logo verificato","✓ Materiali originali","<b style='color:#00ff88'>AUTENTICA 98% • VERA ✓</b>"];let i=0;let it=setInterval(()=>{if(i<steps.length){document.getElementById('checks').innerHTML+=steps[i]+"<br>";i++;}else{clearInterval(it);document.getElementById('closeBtn').style.display='block';}},400);}
-function addCloth(e){let file=e.target.files[0];if(!file)return;let cat=prompt("COS'E'? TOP / MAGLIETTA / GONNA / PANTALONE / SHORTS / TUTA / SCARPE / BORSA","TOP");if(!cat)return;cat=cat.toUpperCase();let type="TOP";if(cat.includes("GONNA")||cat.includes("PANT")||cat.includes("SHORT")||cat.includes("TUTA")||cat.includes("JEANS")) type="BOTTOM";else if(cat.includes("SCARP")) type="SCARPE";else if(cat.includes("BORSA")||cat.includes("BAG")) type="BORSA";let r=new FileReader();r.onload=function(ev){let img=new Image();img.src=ev.target.result;img.onload=function(){let c=document.createElement('canvas');let w=700;let h=img.height*(700/img.width);c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);let comp=c.toDataURL('image/jpeg',0.6);wardrobe.push({src:comp,cat:cat,type:type});localStorage.setItem('auth118',JSON.stringify(wardrobe));renderWard();}};r.readAsDataURL(file);e.target.value='';}
-function renderWard(){let g=document.getElementById('wardGrid');let emp=document.getElementById('empty');document.getElementById('count').innerText="("+wardrobe.length+")";if(wardrobe.length==0){g.innerHTML='';emp.style.display='block';return;}emp.style.display='none';g.innerHTML=wardrobe.map((it,i)=>`<div class="card"><img src="${it.src}"><div style="padding:7px;display:flex;justify-content:space-between"><span style="font-size:8px;background:#222;padding:4px 8px;border-radius:10px">${it.cat}</span><span onclick="wardrobe.splice(${i},1);localStorage.setItem('auth118',JSON.stringify(wardrobe));renderWard()" style="color:#f55">✕</span></div></div>`).join('');}
-function makeOutfit(){let tops=wardrobe.filter(x=>x.type=="TOP");let bottoms=wardrobe.filter(x=>x.type=="BOTTOM");let shoes=wardrobe.filter(x=>x.type=="SCARPE");let bags=wardrobe.filter(x=>x.type=="BORSA");if(tops.length==0||bottoms.length==0){alert("Serve 1 TOP e 1 BOTTOM");return;}combos=[];for(let t of tops){for(let b of bottoms){let sL=shoes.length?shoes:[null];let bL=bags.length?bags:[null];for(let s of sL){for(let bg of bL){combos.push({t,b,s,bg})}}}}outfitIdx=0;document.getElementById('info').innerText="Hai "+combos.length+" outfit!";document.getElementById('nextBtn').style.display=combos.length>1?'block':'none';showCombo();}
-function nextOutfit(){outfitIdx=(outfitIdx+1)%combos.length;showCombo();}
-function showCombo(){let c=combos[outfitIdx];document.getElementById('outfitArea').innerHTML=`<div style="background:#fff;border-radius:22px;padding:14px;width:100%;max-width:400px"><div style="text-align:center"><span style="background:#000;color:#fff;font-size:8px;padding:6px 12px;border-radius:20px">OUTFIT ${outfitIdx+1}/${combos.length} • ${90+Math.floor(Math.random()*9)}%</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><div><p style="color:#000;font-size:8px;font-weight:800">${c.t.cat}</p><img src="${c.t.src}" style="width:100%;height:130px;object-fit:cover;border-radius:12px"></div><div><p style="color:#000;font-size:8px;font-weight:800">${c.b.cat}</p><img src="${c.b.src}" style="width:100%;height:130px;object-fit:cover;border-radius:12px"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">${c.s?`<div><p style="color:#000;font-size:8px;font-weight:800">${c.s.cat}</p><img src="${c.s.src}" style="width:100%;height:100px;object-fit:cover;border-radius:12px"></div>`:`<div style="background:#f5f5f5;border-radius:12px;height:100px;display:flex;align-items:center;justify-content:center"><span style="color:#aaa;font-size:10px">+ SCARPE</span></div>`}${c.bg?`<div><p style="color:#000;font-size:8px;font-weight:800">${c.bg.cat}</p><img src="${c.bg.src}" style="width:100%;height:100px;object-fit:cover;border-radius:12px"></div>`:`<div style="background:#f5f5f5;border-radius:12px;height:100px;display:flex;align-items:center;justify-content:center"><span style="color:#aaa;font-size:10px">+ BORSA</span></div>`}</div></div>`;}
-renderPills();renderWard();
-</script></body></html>
+function filterBrand(brand, btn){
+document.querySelectorAll('.brand-btn').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+const body=document.getElementById('body');
+if(brand==='Hermès'){body.classList.add('hermes-mode')}else{body.classList.remove('hermes-mode')}
+document.querySelectorAll('.card').forEach(card=>{
+if(brand==='all' || card.dataset.brand===brand){card.classList.add('show')}else{card.classList.remove('show')}
+});
+}
+</script>
+</body>
+</html>
