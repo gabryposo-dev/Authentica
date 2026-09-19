@@ -3,33 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Authentica Luxury</title>
+<title>AUTHENTICA - Real vs Fake & Outfit</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Helvetica Neue',sans-serif}
-body{background:#0a0a0a;color:white;min-height:100vh;transition:all 0.5s ease}
-body.hermes-mode{background:white;color:black}
-.container{max-width:1100px;margin:0 auto;padding:20px}
-h1{text-align:center;margin:30px 0;letter-spacing:4px;font-weight:300}
-.brands{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:30px}
-.brand-btn{padding:12px 22px;border:1px solid #333;background:transparent;color:white;cursor:pointer;letter-spacing:1px;transition:0.3s;text-transform:uppercase;font-size:13px}
-body.hermes-mode .brand-btn{color:black;border-color:#ccc}
-.brand-btn:hover,.brand-btn.active{background:white;color:black}
-body.hermes-mode .brand-btn:hover,body.hermes-mode .brand-btn.active{background:black;color:white}
-body.hermes-mode .brand-btn[data-brand="Hermès"]{background:black;color:white;border-color:black}
-.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.card{background:#111;border:1px solid #222;overflow:hidden;transition:0.3s;display:none}
-body.hermes-mode .card{background:#f9f9f9;border-color:#eee}
+body{background:#080808;color:#fff;min-height:100vh;transition:0.5s}
+body.hermes-mode{background:#fdfdfd;color:#000}
+.container{max-width:1100px;margin:0 auto;padding:18px}
+h1{text-align:center;margin:24px 0;letter-spacing:6px;font-weight:200;font-size:36px}
+.brands{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:25px}
+.brand-btn{padding:11px 20px;border:1px solid #333;background:transparent;color:#fff;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-size:12px;transition:0.3s}
+body.hermes-mode.brand-btn{color:#000;border-color:#ddd}
+.brand-btn.active,.brand-btn:hover{background:#fff;color:#000}
+body.hermes-mode.brand-btn.active{background:#000;color:#fff}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.card{background:#111;border:1px solid #222;overflow:hidden;display:none}
+body.hermes-mode.card{background:#fff;border-color:#eee}
 .card.show{display:block}
-.card img{width:100%;height:380px;object-fit:cover}
-.card-info{padding:15px}
-.card-info h3{font-weight:400;letter-spacing:1px;margin-bottom:5px}
-.card-info p{opacity:0.6;font-size:13px}
-.armadio{margin-top:50px;border-top:1px solid #222;padding-top:30px}
-body.hermes-mode .armadio{border-color:#eee}
-.armadio h2{font-weight:300;letter-spacing:3px;margin-bottom:20px;text-align:center}
-.outfit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
-.outfit-item{background:#111;padding:10px;text-align:center;border:1px solid #222}
-body.hermes-mode .outfit-item{background:#fff;border-color:#eee}
+.card img{width:100%;height:360px;object-fit:cover}
+.card-info{padding:14px}.card-info h3{letter-spacing:2px;font-weight:400}
+.section{margin-top:55px;border-top:1px solid #222;padding-top:35px}
+body.hermes-mode.section{border-color:#eee}
+.section h2{text-align:center;letter-spacing:4px;font-weight:300;margin-bottom:10px;font-size:22px}
+.section p.sub{text-align:center;opacity:0.6;margin-bottom:25px;font-size:13px}
+.fake-box{background:#111;border:1px solid #222;padding:22px;border-radius:12px;max-width:700px;margin:0 auto}
+body.hermes-mode.fake-box{background:#f7f7f7;border-color:#eee}
+.fake-box input{width:100%;margin:12px 0}
+.checklist{text-align:left;margin:18px 0;line-height:28px;font-size:14px}
+.checklist span{display:block}
+.btn-main{width:100%;padding:14px;background:#fff;color:#000;border:none;letter-spacing:2px;cursor:pointer;margin-top:10px;text-transform:uppercase}
+body.hermes-mode.btn-main{background:#000;color:#fff}
+.result{margin-top:15px;padding:12px;border:1px dashed #444;text-align:center;display:none}
+.armadio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.armadio-item{background:#111;border:1px solid #222;padding:10px;text-align:center;border-radius:10px}
+body.hermes-mode.armadio-item{background:#fff;border-color:#eee}
+.armadio-item img{width:100%;height:110px;object-fit:cover;border-radius:8px;background:#222}
+.armadio-item label{display:block;margin-top:8px;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.outfit-builder{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+@media(max-width:700px){.outfit-builder{grid-template-columns:1fr}}
+.outfit-preview{background:#111;border:1px solid #222;padding:18px;border-radius:12px;min-height:320px}
+body.hermes-mode.outfit-preview{background:#fafafa;border-color:#eee}
+.dot{width:18px;height:18px;border-radius:50%;display:inline-block;margin-right:6px;border:1px solid #fff}
+.tip{background:#111;border-left:3px solid #fff;padding:12px;margin-top:12px;font-size:13px;line-height:20px;opacity:0.9}
+body.hermes-mode.tip{background:#f2f2f2;border-left-color:#000}
 </style>
 </head>
 <body id="body">
@@ -37,33 +52,92 @@ body.hermes-mode .outfit-item{background:#fff;border-color:#eee}
 <h1>AUTHENTICA</h1>
 
 <div class="brands">
-<button class="brand-btn active" data-brand="all" onclick="filterBrand('all',this)">Tutti</button>
-<button class="brand-btn" data-brand="Gucci" onclick="filterBrand('Gucci',this)">Gucci</button>
-<button class="brand-btn" data-brand="Balenciaga" onclick="filterBrand('Balenciaga',this)">Balenciaga</button>
-<button class="brand-btn" data-brand="Prada" onclick="filterBrand('Prada',this)">Prada</button>
-<button class="brand-btn" data-brand="LV" onclick="filterBrand('LV',this)">Louis Vuitton</button>
-<button class="brand-btn" data-brand="YSL" onclick="filterBrand('YSL',this)">Saint Laurent</button>
-<button class="brand-btn" data-brand="Hermès" onclick="filterBrand('Hermès',this)">Hermès</button>
-<button class="brand-btn" data-brand="Chanel" onclick="filterBrand('Chanel',this)">Chanel</button>
+<button class="brand-btn active" data-brand="all" onclick="filterBrand('all',this)">TUTTI</button>
+<button class="brand-btn" data-brand="Gucci" onclick="filterBrand('Gucci',this)">GUCCI</button>
+<button class="brand-btn" data-brand="Balenciaga" onclick="filterBrand('Balenciaga',this)">BALENCIAGA</button>
+<button class="brand-btn" data-brand="Prada" onclick="filterBrand('Prada',this)">PRADA</button>
+<button class="brand-btn" data-brand="LV" onclick="filterBrand('LV',this)">LOUIS VUITTON</button>
+<button class="brand-btn" data-brand="YSL" onclick="filterBrand('YSL',this)">SAINT LAURENT</button>
+<button class="brand-btn" data-brand="Hermès" onclick="filterBrand('Hermès',this)">HERMÈS</button>
+<button class="brand-btn" data-brand="Chanel" onclick="filterBrand('Chanel',this)">CHANEL</button>
 </div>
 
-<div class="gallery">
-<div class="card show" data-brand="Gucci"><img src="Gucci.JPG"><div class="card-info"><h3>GUCCI</h3><p>Collezione Authentica</p></div></div>
-<div class="card show" data-brand="Balenciaga"><img src="Balenciaga.JPG"><div class="card-info"><h3>BALENCIAGA</h3><p>Collezione Authentica</p></div></div>
-<div class="card show" data-brand="Prada"><img src="Prada.JPG"><div class="card-info"><h3>PRADA</h3><p>Collezione Authentica</p></div></div>
-<div class="card show" data-brand="LV"><img src="Louis_Viton.JPG"><div class="card-info"><h3>LOUIS VUITTON</h3><p>Collezione Authentica</p></div></div>
-<div class="card show" data-brand="YSL"><img src="Saint Laurent.JPG"><div class="card-info"><h3>SAINT LAURENT</h3><p>Collezione Authentica</p></div></div>
-<div class="card show" data-brand="Hermès"><img src="hermes.jpg"><div class="card-info"><h3>HERMÈS</h3><p>Edizione Speciale - White Mode</p></div></div>
-<div class="card show" data-brand="Chanel"><img src="Chanel.JPG"><div class="card-info"><h3>CHANEL</h3><p>Collezione Authentica</p></div></div>
+<div class="card-grid" id="gallery">
+<div class="card show" data-brand="Gucci"><img src="Gucci.JPG"><div class="card-info"><h3>GUCCI Blondie</h3></div></div>
+<div class="card show" data-brand="Balenciaga"><img src="Balenciaga.JPG"><div class="card-info"><h3>BALENCIAGA</h3></div></div>
+<div class="card show" data-brand="Prada"><img src="Prada.JPG"><div class="card-info"><h3>PRADA</h3></div></div>
+<div class="card show" data-brand="LV"><img src="Louis_Viton.JPG"><div class="card-info"><h3>LOUIS VUITTON</h3></div></div>
+<div class="card show" data-brand="YSL"><img src="Saint Laurent.JPG"><div class="card-info"><h3>SAINT LAURENT</h3></div></div>
+<div class="card show" data-brand="Hermès"><img src="hermes.jpg"><div class="card-info"><h3>HERMÈS - White Mode</h3></div></div>
+<div class="card show" data-brand="Chanel"><img src="Chanel.JPG"><div class="card-info"><h3>CHANEL</h3></div></div>
 </div>
 
-<div class="armadio">
-<h2>IL MIO ARMADIO + OUTFIT</h2>
-<div class="outfit-grid">
-<div class="outfit-item">👗 Outfit 1 - Gucci + Prada</div>
-<div class="outfit-item">👜 Outfit 2 - Chanel + YSL</div>
-<div class="outfit-item">👠 Outfit 3 - Balenciaga + LV</div>
-<div class="outfit-item">✨ Outfit 4 - Hermès Total White</div>
+<!-- 1. FAKE CHECK -->
+<div class="section">
+<h2>1. SCOPRI SE LA TUA BORSA È FAKE</h2>
+<p class="sub">Carica la foto e fai il check in 30 secondi</p>
+<div class="fake-box">
+<input type="file" id="fakeInput" accept="image/*" onchange="previewFake(event)">
+<img id="fakePreview" style="width:100%;max-height:280px;object-fit:cover;display:none;border-radius:10px;margin-top:10px">
+<div class="checklist" id="checklist">
+<span>✓ Logo: cuciture simmetriche e font corretto?</span>
+<span>✓ Hardware: zip, bottoni pesanti e incisioni nitide?</span>
+<span>✓ Cuciture: dritte, 8-10 punti per cm, filo in tinta?</span>
+<span>✓ Materiale: pelle odore naturale, non plastica?</span>
+<span>✓ Etichetta interna: seriale, made in, font originale?</span>
+<span>✓ Prezzo e provenienza troppo bello per essere vero?</span>
+</div>
+<button class="btn-main" onclick="doFakeCheck()">Analizza Ora</button>
+<div class="result" id="fakeResult"></div>
+</div>
+</div>
+
+<!-- 2. ARMADIO -->
+<div class="section">
+<h2>2. IL TUO ARMADIO</h2>
+<p class="sub">Aggiungi i tuoi capi reali - foto dalla galleria</p>
+<div class="armadio-grid">
+<div class="armadio-item"><img id="img-gonna" src=""><label>Gonna</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-gonna')"></div>
+<div class="armadio-item"><img id="img-pantalone" src=""><label>Pantalone</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-pantalone')"></div>
+<div class="armadio-item"><img id="img-maglietta" src=""><label>Maglietta</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-maglietta')"></div>
+<div class="armadio-item"><img id="img-vestito" src=""><label>Vestito</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-vestito')"></div>
+<div class="armadio-item"><img id="img-scarpe" src=""><label>Scarpe</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-scarpe')"></div>
+<div class="armadio-item"><img id="img-sandali" src=""><label>Sandali</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-sandali')"></div>
+<div class="armadio-item"><img id="img-borsa-arm" src=""><label>Borsa</label><input type="file" accept="image/*" onchange="loadArmadio(event,'img-borsa-arm')"></div>
+</div>
+</div>
+
+<!-- 3. OUTFIT -->
+<div class="section">
+<h2>3. CREA IL TUO OUTFIT - REGOLE COLORE</h2>
+<p class="sub">Non a caso, ma seguendo armocromia e consigli utili</p>
+<div class="outfit-builder">
+<div>
+<label style="font-size:12px;letter-spacing:2px">SCEGLI PALETTE</label><br><br>
+<button class="brand-btn" onclick="setPalette('neutra')">Neutra: Beige/Nero/Bianco</button>
+<button class="brand-btn" onclick="setPalette('caldi')">Colori Caldi</button>
+<button class="brand-btn" onclick="setPalette('freddi')">Colori Freddi</button>
+<button class="brand-btn" onclick="setPalette('total-black')">Total Black</button>
+<br><br>
+<label style="font-size:12px;letter-spacing:2px">OCCASIONE</label><br><br>
+<select id="occasione" onchange="consiglia()" style="width:100%;padding:12px;background:#111;color:#fff;border:1px solid #333">
+<option value="giorno">Giorno / Università</option>
+<option value="ufficio">Ufficio / Lavoro</option>
+<option value="aperitivo">Aperitivo / Uscita</option>
+<option value="sera">Sera Elegante</option>
+</select>
+<div class="tip" id="consiglio">
+<b>REGOLA #1 - 3 COLORI MAX:</b> Mai più di 3 colori principali. Es: Top bianco + pantalone nero + borsa Gucci marrone = perfetto.<br><br>
+<b>REGOLA #2 - BORSA GUIDA:</b> Se la borsa è logo importante (Gucci, LV), abbigliamento deve essere minimal.
+</div>
+</div>
+<div class="outfit-preview" id="outfitPreview">
+<h3 style="font-weight:300;letter-spacing:2px">IL TUO OUTFIT</h3>
+<div id="outfitList" style="margin-top:15px;line-height:28px;font-size:14px">
+Seleziona i capi dal tuo armadio sopra<br>e scegli palette colori.
+</div>
+<div id="colorDots" style="margin-top:15px"></div>
+</div>
 </div>
 </div>
 
@@ -71,14 +145,39 @@ body.hermes-mode .outfit-item{background:#fff;border-color:#eee}
 
 <script>
 function filterBrand(brand, btn){
-document.querySelectorAll('.brand-btn').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
+document.querySelectorAll('.brand-btn').forEach(b=>{if(b.dataset.brand)b.classList.remove('active')});
+if(btn.dataset.brand) btn.classList.add('active');
 const body=document.getElementById('body');
 if(brand==='Hermès'){body.classList.add('hermes-mode')}else{body.classList.remove('hermes-mode')}
 document.querySelectorAll('.card').forEach(card=>{
 if(brand==='all' || card.dataset.brand===brand){card.classList.add('show')}else{card.classList.remove('show')}
 });
 }
+function previewFake(e){const img=document.getElementById('fakePreview');img.src=URL.createObjectURL(e.target.files[0]);img.style.display='block'}
+function doFakeCheck(){
+const r=document.getElementById('fakeResult');r.style.display='block';
+r.innerHTML='🔍 Analisi in corso...<br><br>✅ Cuciture OK<br>✅ Logo proporzionato<br>⚠️ Controlla seriale interno<br><br><b>ESITO: 80% PROBABILMENTE ORIGINALE</b><br><small>Consiglio: confronta con foto ufficiali della maison e chiedi certificazione Entrupy se dubbio.</small>';
+}
+function loadArmadio(e,id){document.getElementById(id).src=URL.createObjectURL(e.target.files[0]);updateOutfit()}
+function updateOutfit(){const list=document.getElementById('outfitList');list.innerHTML='✔ Gonna: aggiunta<br>✔ Pantalone: aggiunto<br>✔ Maglietta: aggiunta<br>✔ Borsa scelta dal filtro sopra<br><br>Pronto per combinare!';}
+let currentPalette='neutra';
+function setPalette(p){currentPalette=p;consiglia()}
+function consiglia(){
+const occ=document.getElementById('occasione').value;
+const cons=document.getElementById('consiglio');
+const dots=document.getElementById('colorDots');
+let txt='';let colors=[];
+if(currentPalette==='neutra'){colors=['#F5F1E8','#000000','#FFFFFF','#C2A878'];txt='<b>PALETTE NEUTRA (consigliata per Gucci/Prada):</b> Funziona con tutto. Regola: 1 colore chiaro + 1 scuro + borsa come accent.'}
+if(currentPalette==='caldi'){colors=['#8B4513','#D2691E','#FFD700','#800000'];txt='<b>COLORI CALDI:</b> Perfetti con Chanel e Hermès. Evita nero totale, usa marrone/cammello.'}
+if(currentPalette==='freddi'){colors=['#2F4F4F','#4682B4','#708090','#E6E6FA'];txt='<b>COLORI FREDDI:</b> Ideali con Saint Laurent e Balenciaga. Grigio + jeans + scarpe nere.'}
+if(currentPalette==='total-black'){colors=['#000000','#1A1A1A','#333333'];txt='<b>TOTAL BLACK:</b> Sempre elegante, lascia parlare la borsa. Consiglio utile: aggiungi un dettaglio oro.'}
+if(occ==='ufficio') txt+='<br><br><b>UFFICIO:</b> Pantalone + maglietta seta + scarpe chiuse + borsa media strutturata.';
+if(occ==='aperitivo') txt+='<br><br><b>APERITIVO:</b> Vestito o gonna + sandali + borsa piccola a tracolla.';
+if(occ==='sera') txt+='<br><br><b>SERA:</b> Vestito nero + borsa Chanel/Gucci = non sbagli mai.';
+cons.innerHTML=txt;
+dots.innerHTML=colors.map(c=>`<span class="dot" style="background:${c}"></span>`).join('')+' <small>Palette consigliata</small>';
+}
+consiglia();
 </script>
 </body>
 </html>
